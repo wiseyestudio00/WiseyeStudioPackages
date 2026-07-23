@@ -1,6 +1,6 @@
 {
     "name": "com.wiseyestudio.buildpipeline",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "displayName": "WiseyeStudio Build Pipeline",
     "description": "ScriptableObject-based batch build pipeline: composable build methods for scenes, define symbols, version codes, Addressables, Steam/Apple upload and packaging steps.\n\nPrerequisites (not auto-resolved): com.wiseyestudio.core, UniTask (git package), Odin Inspector (paid asset).",
     "unity": "6000.0",

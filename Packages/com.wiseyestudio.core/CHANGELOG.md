@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.0] - 2026-07-23
+
+- **Breaking:** renamed `VersionCode` public fields to camelCase (`Major`→`major`, `Minor`→`minor`, `SubVersion`→`subVersion`, `BuildNumber`→`buildNumber`, `Extra`→`extra`) and constants to PascalCase (`MAX_MAJOR`→`MaxMajor`, etc.). Serialized data is preserved via `FormerlySerializedAs`, but consuming code must update field references.
+
 ## [0.1.0] - 2026-07-23
 
 - Initial extraction from Project Lily: VersionCode, VersionCodeConvertor, DataProvider family, OpenDirectoryHelper, Singleton (own asmdef).

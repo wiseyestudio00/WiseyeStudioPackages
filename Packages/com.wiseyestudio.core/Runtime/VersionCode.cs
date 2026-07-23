@@ -1,24 +1,33 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace WiseyeStudio
 {
     [System.Serializable]
     public struct VersionCode
     {
-        public const int MAX_MAJOR = 127;
-        public const int MAX_MINOR = 255;
-        public const int MAX_SUB_VERSION = 15;
-        public const int MAX_BUILD_NUMBER = 4095;
+        public const int MaxMajor = 127;
+        public const int MaxMinor = 255;
+        public const int MaxSubVersion = 15;
+        public const int MaxBuildNumber = 4095;
 
-        [Range(0, MAX_MAJOR)]
-        [SerializeField] public int Major;
-        [Range(0, MAX_MINOR)]
-        [SerializeField] public int Minor;
-        [Range(0, MAX_SUB_VERSION)]
-        [SerializeField] public int SubVersion;
-        [HideInInspector] public int BuildNumber;
+        [FormerlySerializedAs("Major")]
+        [Range(0, MaxMajor)]
+        [SerializeField] public int major;
+        
+        [FormerlySerializedAs("Minor")]
+        [Range(0, MaxMinor)]
+        [SerializeField] public int minor;
 
-        [SerializeField] public string Extra;
+        [FormerlySerializedAs("SubVersion")]
+        [Range(0, MaxSubVersion)]
+        [SerializeField] public int subVersion;
+
+        [FormerlySerializedAs("BuildNumber")]
+        [HideInInspector] public int buildNumber;
+
+        [FormerlySerializedAs("Extra")]
+        [SerializeField] public string extra;
 
         public VersionCode(
             int major,
@@ -27,21 +36,21 @@ namespace WiseyeStudio
             int buildNumber,
             string extra)
         {
-            Major = major;
-            Minor = minor;
-            SubVersion = subVersion;
-            BuildNumber = buildNumber;
-            Extra = extra;
+            this.major = major;
+            this.minor = minor;
+            this.subVersion = subVersion;
+            this.buildNumber = buildNumber;
+            this.extra = extra;
         }
 
         public static VersionCode Parse(string versionCode)
         {
-            string[] versionCodeSplit = versionCode.Split('.');
+            var versionCodeSplit = versionCode.Split('.');
 
-            int major = 0;
-            int minor = 1;
-            int subVersion = 1;
-            int buildNumber = 0;
+            var major = 0;
+            var minor = 1;
+            var subVersion = 1;
+            var buildNumber = 0;
 
             if(versionCodeSplit.Length > 0)
             {

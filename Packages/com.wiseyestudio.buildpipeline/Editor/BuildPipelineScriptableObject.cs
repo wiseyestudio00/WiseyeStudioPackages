@@ -198,19 +198,19 @@ namespace WiseyeStudio.Build
                 string cachedVersionCodeString = File.ReadAllText(cacheVersionCodeFilePath);
                 VersionCode cachedVersionCode = VersionCode.Parse(cachedVersionCodeString);
 
-                if (cachedVersionCode.Major != VersionCode.Major
-                    || cachedVersionCode.Minor != VersionCode.Minor
-                    || cachedVersionCode.SubVersion != VersionCode.SubVersion)
+                if (cachedVersionCode.major != VersionCode.major
+                    || cachedVersionCode.minor != VersionCode.minor
+                    || cachedVersionCode.subVersion != VersionCode.subVersion)
                 {
                     buildNumber = 0;
                 }
                 else
                 {
-                    buildNumber = cachedVersionCode.BuildNumber + 1;
+                    buildNumber = cachedVersionCode.buildNumber + 1;
                 }
             }
 
-            VersionCode vc = new(VersionCode.Major, VersionCode.Minor, VersionCode.SubVersion, buildNumber, VersionCode.Extra);
+            VersionCode vc = new(VersionCode.major, VersionCode.minor, VersionCode.subVersion, buildNumber, VersionCode.extra);
 
             switch (TargetGroup)
             {
@@ -228,12 +228,12 @@ namespace WiseyeStudio.Build
                     break;
             }
 
-            FileIOUtility.SafeWriteAllText(cacheVersionCodeFilePath, $"{vc.Major}.{vc.Minor}.{vc.SubVersion}.{vc.BuildNumber}");
+            FileIOUtility.SafeWriteAllText(cacheVersionCodeFilePath, $"{vc.major}.{vc.minor}.{vc.subVersion}.{vc.buildNumber}");
         }
 
         private void SetVersionCodeAndroid(BuildPipelineBuildingData buildingData, VersionCode versionCode)
         {
-            string versionCodeString = $"{versionCode.Major}.{versionCode.Minor}.{versionCode.SubVersion}.{versionCode.BuildNumber}";
+            string versionCodeString = $"{versionCode.major}.{versionCode.minor}.{versionCode.subVersion}.{versionCode.buildNumber}";
             PlayerSettings.bundleVersion = versionCodeString;
 #if UNITY_ANDROID
             PlayerSettings.Android.bundleVersionCode = new VersionCodeConvertor().VersionToInteger(versionCode);
@@ -245,7 +245,7 @@ namespace WiseyeStudio.Build
 
         private void SetVersionCodeIOS(BuildPipelineBuildingData buildingData, VersionCode versionCode)
         {
-            string versionCodeString = $"{versionCode.Major}.{versionCode.Minor}.{versionCode.SubVersion}";
+            string versionCodeString = $"{versionCode.major}.{versionCode.minor}.{versionCode.subVersion}";
             PlayerSettings.bundleVersion = versionCodeString;
             buildingData.ResultReport.VersionCode = versionCodeString;
             buildingData.AddReportMessage($"Set Version Code: {versionCodeString}");
@@ -253,13 +253,13 @@ namespace WiseyeStudio.Build
 
         private void SetVersionCodeStandalone(BuildPipelineBuildingData buildingData, VersionCode versionCode)
         {
-            string versionCodeString = $"{versionCode.Major}.{versionCode.Minor}.{versionCode.SubVersion}.{versionCode.BuildNumber}";
+            string versionCodeString = $"{versionCode.major}.{versionCode.minor}.{versionCode.subVersion}.{versionCode.buildNumber}";
             buildingData.ResultReport.VersionCode = versionCodeString;
             buildingData.AddReportMessage($"Set Version Code: {versionCodeString}");
 
-            if (string.IsNullOrWhiteSpace(versionCode.Extra) == false)
+            if (string.IsNullOrWhiteSpace(versionCode.extra) == false)
             {
-                versionCodeString += $"-{versionCode.Extra}";
+                versionCodeString += $"-{versionCode.extra}";
             }
 
             PlayerSettings.bundleVersion = versionCodeString;

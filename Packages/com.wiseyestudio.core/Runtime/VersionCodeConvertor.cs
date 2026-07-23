@@ -38,7 +38,7 @@ namespace WiseyeStudio
 
         public int VersionToInteger(VersionCode versionCode)
         {
-            return VersionToInteger($"{versionCode.Major}.{versionCode.Minor}.{versionCode.SubVersion}.{versionCode.BuildNumber}");
+            return VersionToInteger($"{versionCode.major}.{versionCode.minor}.{versionCode.subVersion}.{versionCode.buildNumber}");
         }
     }
 }

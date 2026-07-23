@@ -8,19 +8,18 @@ Unity packages shared across Wiseye Studio projects, installable via UPM git URL
 | [com.wiseyestudio.buildpipeline](Packages/com.wiseyestudio.buildpipeline/README.md) | ScriptableObject-based batch build pipeline with composable build methods |
 | [com.wiseyestudio.steam](Packages/com.wiseyestudio.steam/README.md) | UniTask-based Steamworks.NET wrapper: init, stats, achievements, leaderboards, friends, avatars |
 
+> [!WARNING]
+> These packages are not well written or well maintained - We just released these packages for easier internal access. Wiseye Studio does not recommend other developers to depend on these packages.
+
 ## Installation
 
-Add the packages you need to your project's `Packages/manifest.json` (or **Window ▸ Package Manager ▸ + ▸ Add package from git URL…**):
+Install these packages via UPM by entering the git URL.
 
-```json
-{
-  "dependencies": {
-    "com.wiseyestudio.core": "https://github.com/wiseyestudio00/WiseyeStudioPackages.git?path=Packages/com.wiseyestudio.core",
-    "com.wiseyestudio.buildpipeline": "https://github.com/wiseyestudio00/WiseyeStudioPackages.git?path=Packages/com.wiseyestudio.buildpipeline",
-    "com.wiseyestudio.steam": "https://github.com/wiseyestudio00/WiseyeStudioPackages.git?path=Packages/com.wiseyestudio.steam"
-  }
-}
-```
+| Package | Description |
+| --- | --- |
+| [com.wiseyestudio.core](Packages/com.wiseyestudio.core/README.md) | https://github.com/wiseyestudio00/WiseyeStudioPackages.git?path=Packages/com.wiseyestudio.core |
+| [com.wiseyestudio.buildpipeline](Packages/com.wiseyestudio.buildpipeline/README.md) | https://github.com/wiseyestudio00/WiseyeStudioPackages.git?path=Packages/com.wiseyestudio.buildpipeline |
+| [com.wiseyestudio.steam](Packages/com.wiseyestudio.steam/README.md) | https://github.com/wiseyestudio00/WiseyeStudioPackages.git?path=Packages/com.wiseyestudio.steam |
 
 To pin a specific release, append a tag to the URL, e.g. `...?path=Packages/com.wiseyestudio.steam#v0.1.2`.
 
