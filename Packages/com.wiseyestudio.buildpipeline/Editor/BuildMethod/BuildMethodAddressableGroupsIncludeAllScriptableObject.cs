@@ -5,9 +5,9 @@ using UnityEngine;
 namespace WiseyeStudio.Build.BuildMethod
 {
     [CreateAssetMenu(
-        fileName = "Build Method - Include All Addressable Groups",
-        menuName = "WiseyeStudio/Build Pipeline/Build Method/Include All Addressable Groups",
-        order = 6)]
+        fileName = BuildPipelineAssetMenuConstants.BuildMethodFilePrefix + "Include All Addressable Groups",
+        menuName = BuildPipelineAssetMenuConstants.BuildMethod + "Include All Addressable Groups",
+        order = BuildPipelineAssetMenuConstants.Order.IncludeAllAddressableGroups)]
     public class BuildMethodAddressableGroupsIncludeAllScriptableObject : ABuildPipelineBuildMethodScriptableObject
     {
         public override void Activate(BuildPipelineBuildingData buildingData)

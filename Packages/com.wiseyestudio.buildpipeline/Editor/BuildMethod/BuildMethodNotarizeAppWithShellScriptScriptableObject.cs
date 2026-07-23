@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 using Sirenix.OdinInspector;
 using Newtonsoft.Json;
@@ -11,23 +10,23 @@ using WiseyeStudio.Build.Apple;
 namespace WiseyeStudio.Build.BuildMethod
 {
     [CreateAssetMenu(
-        fileName = "Build Method - Mac Notarize App With Shell Script",
-        menuName = "WiseyeStudio/Build Pipeline/Build Method/Mac Notarize App With Shell Script",
-        order = 4)]
+        fileName = BuildPipelineAssetMenuConstants.BuildMethodFilePrefix + "Mac Notarize App With Shell Script",
+        menuName = BuildPipelineAssetMenuConstants.BuildMethod + "Mac Notarize App With Shell Script",
+        order = BuildPipelineAssetMenuConstants.Order.MacNotarizeAppWithShellScript)]
     public class BuildMethodNotarizeAppWithShellScriptScriptableObject : ABuildPipelineBuildMethodExecuteShellScriptScriptableObject
     {
-        [Title("Shell Arugments")]
-        [Required]
-        [SerializeField] string AppleConnectAccountJsonPath;
+        [Title("Shell Arguments")]
+        [FormerlySerializedAs("AppleConnectAccountJsonPath")]
+        [Required, SerializeField] private string appleConnectAccountJsonPath;
 
         public override void Activate(BuildPipelineBuildingData buildingData)
         {
-            string builtAppPath = buildingData.BuildOptions.locationPathName;
-            string zippedAppPath = Path.Combine(buildingData.BuildBaseFolderPath, $"{buildingData.BuildName}.zip");
+            var builtAppPath = buildingData.BuildOptions.locationPathName;
+            var zippedAppPath = Path.Combine(buildingData.BuildBaseFolderPath, $"{buildingData.BuildName}.zip");
             
-            string absoluteShellScriptPath = Path.Combine(Application.dataPath, ShellScriptPath);
-            string appleConnectAccountJsonPath = Path.Combine(Application.dataPath, AppleConnectAccountJsonPath);
-            AppleConnectAccountData accountData = JsonConvert.DeserializeObject<AppleConnectAccountData>(File.ReadAllText(appleConnectAccountJsonPath));
+            var absoluteShellScriptPath = Path.Combine(Application.dataPath, shellScriptPath);
+            var absoluteAppleConnectAccountJsonPath = Path.Combine(Application.dataPath, appleConnectAccountJsonPath);
+            var accountData = JsonConvert.DeserializeObject<AppleConnectAccountData>(File.ReadAllText(absoluteAppleConnectAccountJsonPath));
 
             if (ChmodOnFile(absoluteShellScriptPath, "+x"))
             {

@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace WiseyeStudio.DataProvider
 {
     [CreateAssetMenu(
         fileName = "String SO",
-        menuName = "WiseyeStudio/Data Provider/String SO",
-        order = 0)]
+        menuName = AssetMenuConstants.DataProvider + "String SO",
+        order = AssetMenuConstants.Order.StringSo)]
     public class StringScriptableObject : ScriptableObject, IDataProvider<string>
     {
         [SerializeField] private string _string;

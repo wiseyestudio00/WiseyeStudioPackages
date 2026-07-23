@@ -1,9 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 using Sirenix.OdinInspector;
 
@@ -13,19 +12,20 @@ namespace WiseyeStudio.Build.BuildMethod
     {
         [Title("Shell Script")]
         [Required]
-        [SerializeField] protected string ShellScriptPath;
+        [FormerlySerializedAs("ShellScriptPath")]
+        [SerializeField] protected string shellScriptPath;
 
         protected bool ChmodOnFile(string fileAbsolutePath, string permissions, bool recursive = false)
         {
             fileAbsolutePath = Path.GetFullPath(fileAbsolutePath);
             fileAbsolutePath = fileAbsolutePath.Replace(" ", "\\ ");
 
-            string cmd = recursive ? $"chmod -R {permissions} {fileAbsolutePath}"
+            var cmd = recursive ? $"chmod -R {permissions} {fileAbsolutePath}"
                 : $"chmod {permissions} {fileAbsolutePath}";
 
             try
             {
-                using Process proc = Process.Start("/bin/bash", $"-c \"{cmd}\"");
+                using var proc = Process.Start("/bin/bash", $"-c \"{cmd}\"");
                 proc.WaitForExit();
                 return proc.ExitCode == 0;
             }
@@ -35,10 +35,10 @@ namespace WiseyeStudio.Build.BuildMethod
             }
         }
 
-        public void ExecuteShellScript(string abosulteShellScriptPath, Action<string> onStandardOutput, params string[] arguments)
+        protected static void ExecuteShellScript(string absoluteShellScriptPath, Action<string> onStandardOutput, params string[] arguments)
         {
             // surround arguments with quotes if they contain spaces
-            for (int i = 0; i < arguments.Length; i++)
+            for (var i = 0; i < arguments.Length; i++)
             {
                 if (arguments[i].Contains(" "))
                 {
@@ -46,22 +46,22 @@ namespace WiseyeStudio.Build.BuildMethod
                 }
             }
 
-            string ShellArguments = string.Join(" ", arguments);
+            var shellArguments = string.Join(" ", arguments);
 
             ProcessStartInfo startInfo = new()
             {
-                FileName = abosulteShellScriptPath,
-                Arguments = ShellArguments,
+                FileName = absoluteShellScriptPath,
+                Arguments = shellArguments,
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
             };
 
-            Process process = Process.Start(startInfo);
-            while (!process.StandardOutput.EndOfStream)
+            var process = Process.Start(startInfo);
+            while (process.StandardOutput.EndOfStream == false)
             {
-                string newLine = process.StandardOutput.ReadLine();
+                var newLine = process.StandardOutput.ReadLine();
                 onStandardOutput?.Invoke(newLine);
             }
             process.WaitForExit();

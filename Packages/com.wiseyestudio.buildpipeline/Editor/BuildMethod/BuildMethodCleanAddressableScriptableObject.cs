@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -10,9 +8,9 @@ using UnityEditor.AddressableAssets.Settings;
 namespace WiseyeStudio.Build.BuildMethod
 {
     [CreateAssetMenu(
-        fileName = "Build Method - Clean Local Addressable Data",
-        menuName = "WiseyeStudio/Build Pipeline/Build Method/Clean Addressable Data",
-        order = 2)]
+        fileName = BuildPipelineAssetMenuConstants.BuildMethodFilePrefix + "Clean Addressable Data",
+        menuName = BuildPipelineAssetMenuConstants.BuildMethod + "Clean Addressable Data",
+        order = BuildPipelineAssetMenuConstants.Order.CleanAddressableData)]
     public class BuildMethodCleanAddressableScriptableObject : ABuildPipelineBuildMethodScriptableObject
     {
         public override void Activate(BuildPipelineBuildingData buildingData)
@@ -34,7 +32,7 @@ namespace WiseyeStudio.Build.BuildMethod
             var activeProfileId = settings.activeProfileId;
 
             // Get the LocalBuildPath value
-            string localAssetPath = profileSettings.GetValueByName(activeProfileId, AddressableAssetSettings.kLocalBuildPath);
+            var localAssetPath = profileSettings.GetValueByName(activeProfileId, AddressableAssetSettings.kLocalBuildPath);
             localAssetPath = settings.profileSettings.EvaluateString(activeProfileId, localAssetPath);
 
             if (!Directory.Exists(localAssetPath))

@@ -6,25 +6,27 @@ using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 using UnityEngine;
+using UnityEngine.Serialization;
 using WiseyeStudio.DataProvider;
 
 namespace WiseyeStudio.Build.BuildMethod
 {
     [CreateAssetMenu(
-        fileName = "Build Method - Only Include Addressable Groups",
-        menuName = "WiseyeStudio/Build Pipeline/Build Method/Only Include Addressable Groups",
-        order = 5)]
+        fileName = BuildPipelineAssetMenuConstants.BuildMethodFilePrefix + "Only Include Addressable Groups",
+        menuName = BuildPipelineAssetMenuConstants.BuildMethod + "Only Include Addressable Groups",
+        order = BuildPipelineAssetMenuConstants.Order.OnlyIncludeAddressableGroups)]
     public class BuildMethodAddressableGroupsIncludeScriptableObject : ABuildPipelineBuildMethodScriptableObject
     {
         [Title("Included Addressable Groups")]
         [Tooltip("Only these groups will be included in final build.")]
         [Required]
-        [OdinSerialize] IDataProvider<List<AddressableAssetGroup>> IncludedAddressableGroups;
+        [FormerlySerializedAs("IncludedAddressableGroups")]
+        [OdinSerialize] private IDataProvider<List<AddressableAssetGroup>> _includedAddressableGroups;
 
         [Button]
         public override void Activate(BuildPipelineBuildingData buildingData)
         {
-            var groupNames = IncludedAddressableGroups.GetData().Select(group => group.name).ToHashSet();
+            var groupNames = _includedAddressableGroups.GetData().Select(group => group.name).ToHashSet();
             foreach (var group in AddressableAssetSettingsDefaultObject.Settings.groups)
             {
                 if (group.HasSchema<BundledAssetGroupSchema>())

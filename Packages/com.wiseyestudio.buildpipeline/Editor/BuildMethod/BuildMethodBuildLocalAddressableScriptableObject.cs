@@ -1,21 +1,19 @@
-using Cysharp.Threading.Tasks;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.Build.Pipeline.Utilities;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace WiseyeStudio.Build.BuildMethod
 {
-    [CreateAssetMenu(fileName = "Build Method - Build Local Addressable Data", menuName = "WiseyeStudio/Build Pipeline/Build Method/Build Local Addressable Data", order = 3)]
+    [CreateAssetMenu(
+        fileName = BuildPipelineAssetMenuConstants.BuildMethodFilePrefix + "Build Local Addressable Data",
+        menuName = BuildPipelineAssetMenuConstants.BuildMethod + "Build Local Addressable Data",
+        order = BuildPipelineAssetMenuConstants.Order.BuildLocalAddressableData)]
     public class BuildMethodBuildLocalAddressableScriptableObject : ABuildPipelineBuildMethodScriptableObject
     {
         public override void Activate(BuildPipelineBuildingData buildingData)
         {
-            AddressableAssetSettings settings = AddressableAssetSettingsDefaultObject.Settings;
+            var settings = AddressableAssetSettingsDefaultObject.Settings;
             if (settings == null)
             {
                 buildingData.AddReportMessage("AddressableAssetSettings not found.");

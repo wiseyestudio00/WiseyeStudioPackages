@@ -1,17 +1,20 @@
 using Sirenix.OdinInspector;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using WiseyeStudio.Build.BuildMethod;
+using UnityEngine.Serialization;
 
 namespace WiseyeStudio.Build.BuildMethod
 {
-    [CreateAssetMenu(fileName = "Build Method - Adjust DSP Buffer Size", menuName = "WiseyeStudio/Build Pipeline/Build Method/Adjust DSP Buffer Size")]
+    [CreateAssetMenu(
+        fileName = BuildPipelineAssetMenuConstants.BuildMethodFilePrefix + "Adjust DSP Buffer Size",
+        menuName = BuildPipelineAssetMenuConstants.BuildMethod + "Adjust DSP Buffer Size",
+        order = BuildPipelineAssetMenuConstants.Order.AdjustDspBufferSize)]
     public class BuildMethodAdjustDSPBufferSizeScriptableObject : ABuildPipelineBuildMethodScriptableObject
     {
         [Required]
-        [ValueDropdown("GetDSPBufferSizes")]
-        [SerializeField] int DSPBufferSize = 1024;
+        [ValueDropdown(nameof(GetDSPBufferSizes))]
+        [FormerlySerializedAs("DSPBufferSize")]
+        [SerializeField] private int dspBufferSize = 1024;
 
         private IEnumerable GetDSPBufferSizes()
         {
@@ -24,7 +27,7 @@ namespace WiseyeStudio.Build.BuildMethod
         public override void Activate(BuildPipelineBuildingData buildingData)
         {
             AudioConfiguration audioConfiguration = AudioSettings.GetConfiguration();
-            audioConfiguration.dspBufferSize = DSPBufferSize;
+            audioConfiguration.dspBufferSize = dspBufferSize;
             AudioSettings.Reset(audioConfiguration);
         }
     }

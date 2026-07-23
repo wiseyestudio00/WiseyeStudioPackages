@@ -1,19 +1,18 @@
-using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using UnityEngine;
 
 namespace WiseyeStudio.Build.BuildMethod
 {
-    [CreateAssetMenu(fileName = "Build Method - Compress Mac Build With Shell Script", menuName = "WiseyeStudio/Build Pipeline/Build Method/Compress Mac Build With Shell Script", order = 4)]
+    [CreateAssetMenu(
+        fileName = BuildPipelineAssetMenuConstants.BuildMethodFilePrefix + "Compress Mac Build With Shell Script",
+        menuName = BuildPipelineAssetMenuConstants.BuildMethod + "Compress Mac Build With Shell Script",
+        order = BuildPipelineAssetMenuConstants.Order.CompressMacBuildWithShellScript)]
     public class BuildMethodCompressMacBuildWithShellScriptScriptableObject : ABuildPipelineBuildMethodExecuteShellScriptScriptableObject
     {
         public override void Activate(BuildPipelineBuildingData buildingData)
         {
-            string builtAppPath = buildingData.BuildOptions.locationPathName;
-            string absoluteShellScriptPath = Path.Combine(Application.dataPath, ShellScriptPath);
+            var builtAppPath = buildingData.BuildOptions.locationPathName;
+            var absoluteShellScriptPath = Path.Combine(Application.dataPath, shellScriptPath);
 
             if(ChmodOnFile(absoluteShellScriptPath, "+x"))
             {

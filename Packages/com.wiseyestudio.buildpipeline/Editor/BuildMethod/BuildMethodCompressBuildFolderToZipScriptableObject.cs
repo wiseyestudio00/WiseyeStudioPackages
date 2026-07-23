@@ -1,12 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using UnityEngine;
 
 namespace WiseyeStudio.Build.BuildMethod
 {
-    [CreateAssetMenu(fileName = "Build Method - Compress Build Folder to Zip", menuName = "WiseyeStudio/Build Pipeline/Build Method/Compress Build Folder to Zip", order = 0)]
+    [CreateAssetMenu(
+        fileName = BuildPipelineAssetMenuConstants.BuildMethodFilePrefix + "Compress Build Folder to Zip",
+        menuName = BuildPipelineAssetMenuConstants.BuildMethod + "Compress Build Folder to Zip",
+        order = BuildPipelineAssetMenuConstants.Order.CompressBuildFolderToZip)]
     public class BuildMethodCompressBuildFolderToZipScriptableObject : ABuildPipelineBuildMethodScriptableObject
     {
         public override void Activate(BuildPipelineBuildingData buildingData)

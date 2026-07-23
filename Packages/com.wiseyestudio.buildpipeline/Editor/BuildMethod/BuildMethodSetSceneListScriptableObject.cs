@@ -1,6 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
@@ -9,19 +9,23 @@ using WiseyeStudio.DataProvider;
 
 namespace WiseyeStudio.Build.BuildMethod
 {
-    [CreateAssetMenu(fileName = "Build Method - Set Scene List", menuName = "WiseyeStudio/Build Pipeline/Build Method/Set Scene List", order = 1)]
+    [CreateAssetMenu(
+        fileName = BuildPipelineAssetMenuConstants.BuildMethodFilePrefix + "Set Scene List",
+        menuName = BuildPipelineAssetMenuConstants.BuildMethod + "Set Scene List",
+        order = BuildPipelineAssetMenuConstants.Order.SetSceneList)]
     public class BuildMethodSetSceneListScriptableObject : ABuildPipelineBuildMethodScriptableObject
     {
         [Required]
-        [OdinSerialize] IDataProvider<List<string>> SceneNamesList;
+        [FormerlySerializedAs("SceneNamesList")]
+        [OdinSerialize] private IDataProvider<List<string>> _sceneNamesList;
 
         public override void Activate(BuildPipelineBuildingData buildingData)
         {
             var buildPlayerOptions = buildingData.BuildOptions;
-            buildPlayerOptions.scenes = SceneNamesList.GetData().ToArray();
+            buildPlayerOptions.scenes = _sceneNamesList.GetData().ToArray();
             buildingData.BuildOptions = buildPlayerOptions;
 
-            buildingData.AddReportMessage($"Set Scene List: {string.Join(", ", SceneNamesList.GetData())}");
+            buildingData.AddReportMessage($"Set Scene List: {string.Join(", ", _sceneNamesList.GetData())}");
         }
     }
 }

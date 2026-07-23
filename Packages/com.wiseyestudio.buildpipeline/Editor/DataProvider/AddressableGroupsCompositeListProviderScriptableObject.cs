@@ -12,7 +12,8 @@ namespace WiseyeStudio.DataProvider
     /// </summary>
     [CreateAssetMenu(
         fileName = "Addressable Groups Composite List SO",
-        menuName = "WiseyeStudio/Data Provider/Addressable Groups Composite List SO")]
+        menuName = AssetMenuConstants.DataProvider + "Addressable Groups Composite List SO",
+        order = Build.BuildPipelineAssetMenuConstants.Order.AddressableGroupsCompositeListSo)]
     public class AddressableGroupsCompositeListProviderScriptableObject : SerializedScriptableObject, IDataProvider<List<AddressableAssetGroup>>
     {
         [OdinSerialize] private List<IDataProvider<List<AddressableAssetGroup>>> _addressableAssetGroups;

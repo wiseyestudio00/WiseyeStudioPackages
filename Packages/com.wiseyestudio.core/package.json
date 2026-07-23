@@ -1,6 +1,6 @@
 {
     "name": "com.wiseyestudio.core",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "displayName": "WiseyeStudio Core",
     "description": "Shared core utilities for WiseyeStudio projects: VersionCode, DataProvider, Singleton and small helpers.\n\nRequires Odin Inspector (paid asset, not included) to be present in the project.",
     "unity": "6000.0",

@@ -1,27 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 using Sirenix.OdinInspector;
 
 namespace WiseyeStudio.Build.BuildMethod
 {
     [CreateAssetMenu(
-        fileName = "Build Method - Copy Build Result To Directory",
-        menuName = "WiseyeStudio/Build Pipeline/Build Method/Copy Build Result To Directory")]
+        fileName = BuildPipelineAssetMenuConstants.BuildMethodFilePrefix + "Copy Build Result To Directory",
+        menuName = BuildPipelineAssetMenuConstants.BuildMethod + "Copy Build Result To Directory",
+        order = BuildPipelineAssetMenuConstants.Order.CopyBuildResultToDirectory)]
     public class BuildMethodCopyBuildResultToDirectoryScriptableObject : ABuildPipelineBuildMethodScriptableObject
     {
         [Required]
-        [SerializeField] string SteamSDKFolderPath;
+        [FormerlySerializedAs("SteamSDKFolderPath")]
+        [SerializeField] private string steamSdkFolderPath;
         [Required]
-        [SerializeField] string SDKSubFolderPath;
+        [FormerlySerializedAs("SDKSubFolderPath")]
+        [SerializeField] private string sdkSubFolderPath;
 
         public override void Activate(BuildPipelineBuildingData buildingData)
         {
-            string denstinationDirectoryPath = Path.Combine(SteamSDKFolderPath, SDKSubFolderPath);
+            var destinationDirectoryPath = Path.Combine(steamSdkFolderPath, sdkSubFolderPath);
             // delete everything in the content folder (recursively)
-            DirectoryInfo contentFolder = new(denstinationDirectoryPath);
+            DirectoryInfo contentFolder = new(destinationDirectoryPath);
             if (contentFolder.Exists)
             {
                 contentFolder.Delete(true);
@@ -29,9 +31,9 @@ namespace WiseyeStudio.Build.BuildMethod
             }
 
             DirectoryInfo buildFolder = new(buildingData.BuildFolderPath);
-            buildFolder.CopyTo(denstinationDirectoryPath);
+            buildFolder.CopyTo(destinationDirectoryPath);
 
-            buildingData.AddReportMessage($"Copied build folder to folder: {buildFolder.FullName} -> {denstinationDirectoryPath}");
+            buildingData.AddReportMessage($"Copied build folder to folder: {buildFolder.FullName} -> {destinationDirectoryPath}");
         }
     }
 }

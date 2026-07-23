@@ -1,22 +1,25 @@
-using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace WiseyeStudio.Build.BuildMethod
 {
-    [CreateAssetMenu(fileName = "Build Method - Switch Build Target", menuName = "WiseyeStudio/Build Pipeline/Build Method/Switch Build Target", order = 0)]
+    [CreateAssetMenu(
+        fileName = BuildPipelineAssetMenuConstants.BuildMethodFilePrefix + "Switch Build Target",
+        menuName = BuildPipelineAssetMenuConstants.BuildMethod + "Switch Build Target",
+        order = BuildPipelineAssetMenuConstants.Order.SwitchBuildTarget)]
     public class BuildMethodSwitchBuildTargetScriptableObject : ABuildPipelineBuildMethodScriptableObject
     {
-        [SerializeField] BuildTargetGroup TargetGroup = BuildTargetGroup.Standalone;
-        [SerializeField] BuildTarget Target;
+        [FormerlySerializedAs("TargetGroup")]
+        [SerializeField] private BuildTargetGroup targetGroup = BuildTargetGroup.Standalone;
+        [FormerlySerializedAs("Target")]
+        [SerializeField] private BuildTarget target;
 
         public override void Activate(BuildPipelineBuildingData buildingData)
         {
             var buildPlayerOptions = buildingData.BuildOptions;
-            buildPlayerOptions.targetGroup = TargetGroup;
-            buildPlayerOptions.target = Target;
+            buildPlayerOptions.targetGroup = targetGroup;
+            buildPlayerOptions.target = target;
             buildingData.BuildOptions = buildPlayerOptions;
 
             // switch build target here.
@@ -25,10 +28,10 @@ namespace WiseyeStudio.Build.BuildMethod
             // https://docs.unity.cn/2017.4/Documentation/ScriptReference/EditorUserBuildSettings.SwitchActiveBuildTarget.html
             if (!Application.isBatchMode)
             {
-                EditorUserBuildSettings.SwitchActiveBuildTarget(TargetGroup, Target);
-            }   
+                EditorUserBuildSettings.SwitchActiveBuildTarget(targetGroup, target);
+            }
 
-            buildingData.AddReportMessage($"Switched Build Target: {TargetGroup} {Target}");
+            buildingData.AddReportMessage($"Switched Build Target: {targetGroup} {target}");
         }
     }
 }

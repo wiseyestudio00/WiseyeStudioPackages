@@ -1,53 +1,54 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 using Sirenix.OdinInspector;
-using Cysharp.Threading.Tasks;
 
 namespace WiseyeStudio.Build.BuildMethod
 {
-    [CreateAssetMenu(fileName = "Build Method - Steam Upload by Batch", menuName = "WiseyeStudio/Build Pipeline/Build Method/Steam Upload by Batch")]
+    [CreateAssetMenu(
+        fileName = BuildPipelineAssetMenuConstants.BuildMethodFilePrefix + "Steam Upload by Batch",
+        menuName = BuildPipelineAssetMenuConstants.BuildMethod + "Steam Upload by Batch",
+        order = BuildPipelineAssetMenuConstants.Order.SteamUploadByBatch)]
     public class BuildMethodSteamUploadWithBatchScriptableObject : ABuildPipelineBuildMethodScriptableObject
     {
         [Title("Batch")]
-        [Required]
-        [SerializeField] string UploadBatchScriptPath;
+        [FormerlySerializedAs("UploadBatchScriptPath")]
+        [Required, SerializeField] private string uploadBatchScriptPath;
 
         [Title("Content Folder")]
-        [Required]
-        [SerializeField] string SteamContentFolderPath;
+        [FormerlySerializedAs("SteamContentFolderPath")]
+        [Required, SerializeField] private string steamContentFolderPath;
 
         [Title("Arguments")]
-        [Required]
-        [SerializeField] string SteamCMDPath;
-        [Required]
-        [SerializeField] string SteamAccountName;
-        [Required]
-        [SerializeField] string SteamAccountPassword;
-        [Required]
-        [SerializeField] string SteamGuardCode;
-        [Required]
-        [SerializeField] string SteamAppBuildVDFPath;
+        [FormerlySerializedAs("SteamCMDPath")]
+        [Required, SerializeField] private string steamCmdPath;
+        [FormerlySerializedAs("SteamAccountName")]
+        [Required, SerializeField] private string steamAccountName;
+        [FormerlySerializedAs("SteamAccountPassword")]
+        [Required, SerializeField] private string steamAccountPassword;
+        [FormerlySerializedAs("SteamGuardCode")]
+        [Required, SerializeField] private string steamGuardCode;
+        [FormerlySerializedAs("SteamAppBuildVDFPath")]
+        [Required, SerializeField] private string steamAppBuildVdfPath;
 
         public override void Activate(BuildPipelineBuildingData buildingData)
         {
             ProcessStartInfo startInfo = new()
             {
-                FileName = Path.Combine(Application.dataPath, UploadBatchScriptPath),
-                Arguments = $"\"{SteamCMDPath}\" \"{SteamAccountName}\" \"{SteamAccountPassword}\" \"{SteamGuardCode}\" \"{SteamAppBuildVDFPath}\"",
+                FileName = Path.Combine(Application.dataPath, uploadBatchScriptPath),
+                Arguments = $"\"{steamCmdPath}\" \"{steamAccountName}\" \"{steamAccountPassword}\" \"{steamGuardCode}\" \"{steamAppBuildVdfPath}\"",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             };
 
             buildingData.AddReportMessage($"Steam Upload: {startInfo.FileName} {startInfo.Arguments}");
-            Process process = Process.Start(startInfo);
-            while (!process.StandardOutput.EndOfStream)
+            var process = Process.Start(startInfo);
+            while (process.StandardOutput.EndOfStream == false)
             {
-                string newLine = process.StandardOutput.ReadLine();
+                var newLine = process.StandardOutput.ReadLine();
                 buildingData.AddReportMessage($"Steam Upload Log: {newLine}");
             }
             process.WaitForExit();

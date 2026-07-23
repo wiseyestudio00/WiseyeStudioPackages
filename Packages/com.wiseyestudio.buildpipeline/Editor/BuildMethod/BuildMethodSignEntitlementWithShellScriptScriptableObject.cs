@@ -1,22 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 using Sirenix.OdinInspector;
-using Cysharp.Threading.Tasks;
 
 namespace WiseyeStudio.Build.BuildMethod
 {
-    [CreateAssetMenu(fileName = "Build Method - Mac Sign Entitlement With Shell Script", menuName = "WiseyeStudio/Build Pipeline/Build Method/Sign Entitlement With Shell Script", order = 4)]
+    [CreateAssetMenu(
+        fileName = BuildPipelineAssetMenuConstants.BuildMethodFilePrefix + "Sign Entitlement With Shell Script",
+        menuName = BuildPipelineAssetMenuConstants.BuildMethod + "Sign Entitlement With Shell Script",
+        order = BuildPipelineAssetMenuConstants.Order.SignEntitlementWithShellScript)]
     public class BuildMethodSignEntitlementWithShellScriptScriptableObject : ABuildPipelineBuildMethodExecuteShellScriptScriptableObject
     {
         [Title("Arguments")]
         [Required]
-        [SerializeField] TextAsset EntitlementTextAsset;
+        [FormerlySerializedAs("EntitlementTextAsset")]
+        [SerializeField] private TextAsset entitlementTextAsset;
         [Required]
-        [SerializeField] string SigningIdentity;
+        [FormerlySerializedAs("SigningIdentity")]
+        [SerializeField] private string signingIdentity;
 
         public override void Activate(BuildPipelineBuildingData buildingData)
         {
@@ -27,10 +29,10 @@ namespace WiseyeStudio.Build.BuildMethod
             }
 
             string entitlementFilePath = Path.Combine(entitlementFolderPath, "LilyFantasia.entitlements");
-            File.WriteAllText(entitlementFilePath, EntitlementTextAsset.text);
+            File.WriteAllText(entitlementFilePath, entitlementTextAsset.text);
             buildingData.AddReportMessage($"Created Entitlements: {entitlementFilePath}");
 
-            string absoluteShellScriptPath = Path.Combine(Application.dataPath, ShellScriptPath);
+            string absoluteShellScriptPath = Path.Combine(Application.dataPath, shellScriptPath);
 
             if(ChmodOnFile(absoluteShellScriptPath, "+x"))
             {
@@ -42,13 +44,13 @@ namespace WiseyeStudio.Build.BuildMethod
             }
 
 
-            buildingData.AddReportMessage($"Start signing entitlements: {absoluteShellScriptPath} {@entitlementFilePath} {@buildingData.BuildOptions.locationPathName} {SigningIdentity}");
+            buildingData.AddReportMessage($"Start signing entitlements: {absoluteShellScriptPath} {@entitlementFilePath} {@buildingData.BuildOptions.locationPathName} {signingIdentity}");
             ExecuteShellScript(absoluteShellScriptPath,
                 newLine =>
                 {
                     buildingData.AddReportMessage("Signing Entitlements: " + newLine);
                 },
-                entitlementFilePath, buildingData.BuildOptions.locationPathName, SigningIdentity);
+                entitlementFilePath, buildingData.BuildOptions.locationPathName, signingIdentity);
 
             // delete entitlements
             if(File.Exists(entitlementFilePath))

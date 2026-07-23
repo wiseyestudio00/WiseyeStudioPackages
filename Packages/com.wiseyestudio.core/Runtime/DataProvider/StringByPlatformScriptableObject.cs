@@ -1,14 +1,12 @@
 using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace WiseyeStudio.DataProvider
 {
     [CreateAssetMenu(
-        fileName = "String Platform SO",
-        menuName = "WiseyeStudio/Data Provider/String by Platform SO",
-        order = 1)]
+        fileName = "String by Platform SO",
+        menuName = AssetMenuConstants.DataProvider + "String by Platform SO",
+        order = AssetMenuConstants.Order.StringByPlatformSo)]
     public class StringByPlatformScriptableObject : ScriptableObject, IDataProvider<string>
     {
         [Tooltip("This string will be used if the platform string does not exist/empty")]

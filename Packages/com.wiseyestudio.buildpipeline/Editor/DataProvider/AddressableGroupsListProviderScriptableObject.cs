@@ -1,7 +1,9 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace WiseyeStudio.DataProvider
 {
@@ -10,14 +12,16 @@ namespace WiseyeStudio.DataProvider
     /// </summary>
     [CreateAssetMenu(
         fileName = "Addressable Groups List SO",
-        menuName = "WiseyeStudio/Data Provider/Addressable Groups List SO")]
+        menuName = AssetMenuConstants.DataProvider + "Addressable Groups List SO",
+        order = Build.BuildPipelineAssetMenuConstants.Order.AddressableGroupsListSo)]
     public class AddressableGroupsListProviderScriptableObject : ScriptableObject, IDataProvider<List<AddressableAssetGroup>>
     {
-        [SerializeField] private List<AddressableAssetGroup> _addressableAssetGroup;
+        [FormerlySerializedAs("_addressableAssetGroup")]
+        [Required, SerializeField] private List<AddressableAssetGroup> addressableAssetGroup;
 
         public List<AddressableAssetGroup> GetData()
         {
-            return _addressableAssetGroup;
+            return addressableAssetGroup;
         }
     }
 }

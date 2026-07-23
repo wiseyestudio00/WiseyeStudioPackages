@@ -12,8 +12,8 @@ namespace WiseyeStudio.Build
 {
     [CreateAssetMenu(
         fileName = "Build Pipeline",
-        menuName = "WiseyeStudio/Build Pipeline/Build Pipeline",
-        order = 1)]
+        menuName = BuildPipelineAssetMenuConstants.Root + "Build Pipeline",
+        order = BuildPipelineAssetMenuConstants.Order.Pipeline)]
     public class BuildPipelineScriptableObject : ScriptableObject
     {
         [Title("Build Target")]
@@ -206,8 +206,8 @@ namespace WiseyeStudio.Build
             }
             else
             {
-                string cachedVersionCodeString = File.ReadAllText(cacheVersionCodeFilePath);
-                VersionCode cachedVersionCode = VersionCode.Parse(cachedVersionCodeString);
+                var cachedVersionCodeString = File.ReadAllText(cacheVersionCodeFilePath);
+                var cachedVersionCode = VersionCode.Parse(cachedVersionCodeString);
 
                 if (cachedVersionCode.major != versionCode.major
                     || cachedVersionCode.minor != versionCode.minor
@@ -242,7 +242,7 @@ namespace WiseyeStudio.Build
             FileIOUtility.SafeWriteAllText(cacheVersionCodeFilePath, $"{vc.major}.{vc.minor}.{vc.subVersion}.{vc.buildNumber}");
         }
 
-        private void SetVersionCodeAndroid(BuildPipelineBuildingData buildingData, VersionCode version)
+        private static void SetVersionCodeAndroid(BuildPipelineBuildingData buildingData, VersionCode version)
         {
             var versionCodeString = $"{version.major}.{version.minor}.{version.subVersion}.{version.buildNumber}";
             PlayerSettings.bundleVersion = versionCodeString;
@@ -254,7 +254,7 @@ namespace WiseyeStudio.Build
             buildingData.AddReportMessage($"Set Version Code: {versionCodeString}");
         }
 
-        private void SetVersionCodeIOS(BuildPipelineBuildingData buildingData, VersionCode version)
+        private static void SetVersionCodeIOS(BuildPipelineBuildingData buildingData, VersionCode version)
         {
             var versionCodeString = $"{version.major}.{version.minor}.{version.subVersion}";
             PlayerSettings.bundleVersion = versionCodeString;
@@ -262,7 +262,7 @@ namespace WiseyeStudio.Build
             buildingData.AddReportMessage($"Set Version Code: {versionCodeString}");
         }
 
-        private void SetVersionCodeStandalone(BuildPipelineBuildingData buildingData, VersionCode version)
+        private static void SetVersionCodeStandalone(BuildPipelineBuildingData buildingData, VersionCode version)
         {
             var versionCodeString = $"{version.major}.{version.minor}.{version.subVersion}.{version.buildNumber}";
             buildingData.ResultReport.versionCode = versionCodeString;

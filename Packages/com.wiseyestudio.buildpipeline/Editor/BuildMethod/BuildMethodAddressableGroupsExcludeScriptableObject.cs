@@ -6,23 +6,25 @@ using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.AddressableAssets.Settings.GroupSchemas;
 using UnityEngine;
+using UnityEngine.Serialization;
 using WiseyeStudio.DataProvider;
 
 namespace WiseyeStudio.Build.BuildMethod
 {
     [CreateAssetMenu(
-        fileName = "Build Method - Exclude Addressable Groups But Include The Rest",
-        menuName = "WiseyeStudio/Build Pipeline/Build Method/Exclude Addressable Groups",
-        order = 6)]
+        fileName = BuildPipelineAssetMenuConstants.BuildMethodFilePrefix + "Exclude Addressable Groups",
+        menuName = BuildPipelineAssetMenuConstants.BuildMethod + "Exclude Addressable Groups",
+        order = BuildPipelineAssetMenuConstants.Order.ExcludeAddressableGroups)]
     public class BuildMethodAddressableGroupsExcludeScriptableObject : ABuildPipelineBuildMethodScriptableObject
     {
         [Required]
         [Tooltip("These groups will be excluded from the final build. The rest will be included.")]
-        [OdinSerialize] IDataProvider<List<AddressableAssetGroup>> ExcludedAddressableGroups;
+        [FormerlySerializedAs("ExcludedAddressableGroups")]
+        [OdinSerialize] private IDataProvider<List<AddressableAssetGroup>> _excludedAddressableGroups;
 
         public override void Activate(BuildPipelineBuildingData buildingData)
         {
-            var groupNames = ExcludedAddressableGroups.GetData().Select(group => group.name).ToHashSet();
+            var groupNames = _excludedAddressableGroups.GetData().Select(group => group.name).ToHashSet();
             foreach (var group in AddressableAssetSettingsDefaultObject.Settings.groups)
             {
                 if (group.HasSchema<BundledAssetGroupSchema>())
