@@ -44,7 +44,7 @@ namespace WiseyeStudio.Build.BuildMethod
             var absoluteSteamCMDPath = Path.Combine(SteamSDKPath, SteamCMDSubPath);
             var absoluteSteamAppBuildVDFPath = Path.Combine(SteamSDKPath, SteamAppBuildVDFSubPath);
 
-            var description = $"{buildingData.BuildName}: {buildingData.ResultReport.VersionCode}";
+            var description = $"{buildingData.BuildName}: {buildingData.ResultReport.versionCode}";
 
             ExecuteShellScript(absoluteShellScriptPath,
                 newLine =>
@@ -55,7 +55,7 @@ namespace WiseyeStudio.Build.BuildMethod
                 accountData.AccountName,
                 accountData.Password,
                 absoluteSteamAppBuildVDFPath,
-                $"Build {buildingData.BuildName} of Version {buildingData.ResultReport.VersionCode}");
+                $"Build {buildingData.BuildName} of Version {buildingData.ResultReport.versionCode}");
 
             buildingData.AddReportMessage($"Uploaded to Steam: {absoluteShellScriptPath}");
         }

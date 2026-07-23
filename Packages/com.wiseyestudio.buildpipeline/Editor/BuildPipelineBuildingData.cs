@@ -48,13 +48,9 @@ namespace WiseyeStudio.Build
 
         private string GetTimeStamp()
         {
-            double secondElapsed = EditorApplication.timeSinceStartup - BuildStartTimeInSeconds;
+            var secondElapsed = EditorApplication.timeSinceStartup - BuildStartTimeInSeconds;
             var t = TimeSpan.FromSeconds(secondElapsed);
-            string timeStamp = string.Format("{0:D2}h:{1:D2}m:{2:D2}s:{3:D3}ms",
-                            t.Hours,
-                            t.Minutes,
-                            t.Seconds,
-                            t.Milliseconds);
+            var timeStamp = $"{t.Hours:D2}h:{t.Minutes:D2}m:{t.Seconds:D2}s:{t.Milliseconds:D3}ms";
             return timeStamp + ">";
         }
 

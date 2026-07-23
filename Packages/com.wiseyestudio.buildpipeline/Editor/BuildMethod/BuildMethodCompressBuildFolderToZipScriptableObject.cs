@@ -17,7 +17,7 @@ namespace WiseyeStudio.Build.BuildMethod
             }
             ZipFile.CreateFromDirectory(buildingData.BuildFolderPath, buildingData.TargetZippedBuildFilePath);
 
-            buildingData.ResultReport.BuiltResultPath = buildingData.TargetZippedBuildFilePath;
+            buildingData.ResultReport.builtResultPath = buildingData.TargetZippedBuildFilePath;
             buildingData.AddReportMessage($"Compressed Build Output: {buildingData.TargetZippedBuildFilePath}");
         }
     }

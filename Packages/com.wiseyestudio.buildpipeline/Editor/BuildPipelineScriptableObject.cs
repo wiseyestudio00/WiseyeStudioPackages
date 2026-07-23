@@ -1,12 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 
 using Sirenix.OdinInspector;
-
+using UnityEngine.Serialization;
 using WiseyeStudio.Build.BuildMethod;
 
 namespace WiseyeStudio.Build
@@ -18,55 +17,67 @@ namespace WiseyeStudio.Build
     public class BuildPipelineScriptableObject : ScriptableObject
     {
         [Title("Build Target")]
-        [SerializeField] BuildTargetGroup TargetGroup = BuildTargetGroup.Standalone;
-        [SerializeField] BuildTarget Target;
+        [FormerlySerializedAs("TargetGroup")]
+        [SerializeField] private BuildTargetGroup targetGroup = BuildTargetGroup.Standalone;
+        [FormerlySerializedAs("Target")]
+        [SerializeField] private BuildTarget target;
 
         [Title("Output Setting")]
-        [SerializeField] string BuildPipelineFolderPath;
-        [SerializeField] string BuildName;
-        [SerializeField] string ExecutableName;
-        [SerializeField] string Exntesion;
+        [FormerlySerializedAs("BuildPipelineFolderPath")]
+        [SerializeField] private string buildPipelineFolderPath;
+        [FormerlySerializedAs("BuildName")]
+        [SerializeField] private string buildName;
+        [FormerlySerializedAs("ExecutableName")]
+        [SerializeField] private string executableName;
+        [FormerlySerializedAs("Exntesion")]
+        [SerializeField] private string extension;
 
         [Title("Build Setting")]
-        [SerializeField] bool DevelopmentBuild;
-        [SerializeField] bool DeepProfileSupport;
+        [FormerlySerializedAs("DevelopmentBuild")]
+        [SerializeField] private bool developmentBuild;
+        [FormerlySerializedAs("DeepProfileSupport")]
+        [SerializeField] private bool deepProfileSupport;
 
         [Title("Version Code")]
-        [SerializeField] VersionCode VersionCode;
+        [FormerlySerializedAs("VersionCode")]
+        [SerializeField] private VersionCode versionCode;
 
         [Title("Extra Define Symbols")]
-        [SerializeField] BuildMethodSetExtraDefineSymbolsScriptableObject SetExtraDefineSymbolsMethod;
+        [FormerlySerializedAs("SetExtraDefineSymbolsMethod")]
+        [SerializeField] private BuildMethodSetExtraDefineSymbolsScriptableObject setExtraDefineSymbolsMethod;
 
         [Title("Set Scenes")]
-        [Required]
-        [SerializeField] BuildMethodSetSceneListScriptableObject SetSceneListMethod;
+        [FormerlySerializedAs("SetSceneListMethod")]
+        [Required, SerializeField] private BuildMethodSetSceneListScriptableObject setSceneListMethod;
 
         [Title("Pre Build Methods")]
-        [Required]
-        [SerializeField] List<ABuildPipelineBuildMethodScriptableObject> PrebuildBuildMethods = new();
+        [FormerlySerializedAs("PrebuildBuildMethods")]
+        [Required, SerializeField] private List<ABuildPipelineBuildMethodScriptableObject> prebuildBuildMethods = new();
 
         [Title("Asset Management")]
-        [Required]
-        [SerializeField] List<ABuildPipelineBuildMethodScriptableObject> AssetManagementBuildMethods = new();
+        [FormerlySerializedAs("AssetManagementBuildMethods")]
+        [Required, SerializeField] private List<ABuildPipelineBuildMethodScriptableObject> assetManagementBuildMethods = new();
 
         [Title("Post Build Methods")]
-        [Required]
-        [SerializeField] List<ABuildPipelineBuildMethodScriptableObject> PostbuildBuildMethods = new();
+        [FormerlySerializedAs("PostbuildBuildMethods")]
+        [Required, SerializeField] private List<ABuildPipelineBuildMethodScriptableObject> postBuildBuildMethods = new();
 
         [Title("Compress Build Folder")]
-        [Required]
-        [SerializeField] ABuildPipelineBuildMethodScriptableObject CompressBuildFolderMethod;
+        [FormerlySerializedAs("CompressBuildFolderMethod")]
+        [Required, SerializeField] private ABuildPipelineBuildMethodScriptableObject compressBuildFolderMethod;
 
         [Title("Upload")]
-        [SerializeField] bool EnableUpload = true;
-        [ShowIf(nameof(EnableUpload))]
-        [Required]
-        [SerializeField] List<ABuildPipelineBuildMethodScriptableObject> UploadMethods = new();
+        [FormerlySerializedAs("EnableUpload")]
+        [SerializeField] private bool enableUpload = true;
+
+        [FormerlySerializedAs("UploadMethods")]
+        [ShowIf(nameof(enableUpload))]
+        [Required, SerializeField] private List<ABuildPipelineBuildMethodScriptableObject> uploadMethods = new();
 
         [Button]
         public BuildPipelineBuildingData Build()
         {
-            DateTime startBuildTime = DateTime.Now;
+            var startBuildTime = DateTime.Now;
             var buildingData = CreateBuildingData();
 
             try
@@ -76,22 +87,22 @@ namespace WiseyeStudio.Build
              
                 buildingData.AddReportMessage($"=== Start Pre-Building ===");
 
-                if(SetExtraDefineSymbolsMethod != null)
+                if(setExtraDefineSymbolsMethod != null)
                 {
-                    SetExtraDefineSymbolsMethod.Activate(buildingData);
+                    setExtraDefineSymbolsMethod.Activate(buildingData);
                 }
 
-                if(SetSceneListMethod != null)
+                if(setSceneListMethod != null)
                 {
-                    SetSceneListMethod.Activate(buildingData);
+                    setSceneListMethod.Activate(buildingData);
                 }
 
-                foreach (var buildMethod in PrebuildBuildMethods)
+                foreach (var buildMethod in prebuildBuildMethods)
                 {
                     buildMethod.Activate(buildingData);
                 }
 
-                foreach (var buildMethod in AssetManagementBuildMethods)
+                foreach (var buildMethod in assetManagementBuildMethods)
                 {
                     buildMethod.Activate(buildingData);
                 }
@@ -105,34 +116,34 @@ namespace WiseyeStudio.Build
                 }
 
                 buildingData.AddReportMessage($"=== Start Post-Building ===");
-                foreach (var buildMethod in PostbuildBuildMethods)
+                foreach (var buildMethod in postBuildBuildMethods)
                 {
                     buildMethod.Activate(buildingData);
                 }
 
-                CompressBuildFolderMethod.Activate(buildingData);
+                compressBuildFolderMethod.Activate(buildingData);
 
-                if (string.IsNullOrEmpty(buildingData.ResultReport.BuiltResultPath))
+                if (string.IsNullOrEmpty(buildingData.ResultReport.builtResultPath))
                 {
-                    buildingData.ResultReport.BuiltResultPath = buildingData.BuildOptions.locationPathName;
-                    buildingData.AddReportMessage($"Built Result Path is not set. Added Built Result Path: {buildingData.ResultReport.BuiltResultPath}");
+                    buildingData.ResultReport.builtResultPath = buildingData.BuildOptions.locationPathName;
+                    buildingData.AddReportMessage($"Built Result Path is not set. Added Built Result Path: {buildingData.ResultReport.builtResultPath}");
                 }
 
-                if (EnableUpload)
+                if (enableUpload)
                 {
-                    foreach (var buildMethod in UploadMethods)
+                    foreach (var buildMethod in uploadMethods)
                     {
                         buildMethod.Activate(buildingData);
                     }
                 }
 
-                buildingData.ResultReport.Success = true;
-                buildingData.ResultReport.BuildTimeInSeconds = (DateTime.Now - startBuildTime).TotalSeconds;
+                buildingData.ResultReport.success = true;
+                buildingData.ResultReport.buildTimeInSeconds = (DateTime.Now - startBuildTime).TotalSeconds;
                 buildingData.AddReportMessage($"=== Build Finished ===");
             }
             catch (Exception e)
             {
-                buildingData.ResultReport.Success = false;
+                buildingData.ResultReport.success = false;
                 buildingData.AddReportMessage(e.Message);
                 buildingData.AddReportMessage(e.StackTrace);
                 buildingData.AddReportMessage($"=== Build Failed ===");
@@ -144,22 +155,22 @@ namespace WiseyeStudio.Build
 
         private BuildOptions GetBuildOptions()
         {
-            BuildOptions buildOptions = BuildOptions.None;
-            buildOptions = DevelopmentBuild ? buildOptions | BuildOptions.Development : buildOptions;
-            buildOptions = DeepProfileSupport ? buildOptions | BuildOptions.EnableDeepProfilingSupport : buildOptions;
+            var buildOptions = BuildOptions.None;
+            buildOptions = developmentBuild ? buildOptions | BuildOptions.Development : buildOptions;
+            buildOptions = deepProfileSupport ? buildOptions | BuildOptions.EnableDeepProfilingSupport : buildOptions;
             return buildOptions;
         }
 
         private string GetExecutableName()
         {
-            return $"{ExecutableName}.{Exntesion}";
+            return $"{executableName}.{extension}";
         }
 
         private BuildPipelineBuildingData CreateBuildingData()
         {
             return new BuildPipelineBuildingData(
-                BuildPipelineFolderPath,
-                BuildName + (DevelopmentBuild ? "_Development" : string.Empty),
+                buildPipelineFolderPath,
+                buildName + (developmentBuild ? "_Development" : string.Empty),
                 GetExecutableName(),
                 GetBuildOptions(),
                 EditorApplication.timeSinceStartup);
@@ -167,9 +178,9 @@ namespace WiseyeStudio.Build
 
         private void SetBuildTarget(BuildPipelineBuildingData buildingData)
         {
-            BuildPlayerOptions buildPlayerOptions = buildingData.BuildOptions;
-            buildPlayerOptions.targetGroup = TargetGroup;
-            buildPlayerOptions.target = Target;
+            var buildPlayerOptions = buildingData.BuildOptions;
+            buildPlayerOptions.targetGroup = targetGroup;
+            buildPlayerOptions.target = target;
             buildingData.BuildOptions = buildPlayerOptions;
 
             // switch build target here.
@@ -178,15 +189,15 @@ namespace WiseyeStudio.Build
             // https://docs.unity.cn/2017.4/Documentation/ScriptReference/EditorUserBuildSettings.SwitchActiveBuildTarget.html
             if (Application.isBatchMode == false)
             {
-                EditorUserBuildSettings.SwitchActiveBuildTarget(TargetGroup, Target);
+                EditorUserBuildSettings.SwitchActiveBuildTarget(targetGroup, target);
             }
 
-            buildingData.AddReportMessage($"Switched Build Target: {TargetGroup} {Target}");
+            buildingData.AddReportMessage($"Switched Build Target: {targetGroup} {target}");
         }
 
         private void SetVersionCode(BuildPipelineBuildingData buildingData)
         {
-            string cacheVersionCodeFilePath = Path.Combine(buildingData.CacheFolderPath, "VersionCode.txt");
+            var cacheVersionCodeFilePath = Path.Combine(buildingData.CacheFolderPath, "VersionCode.txt");
 
             int buildNumber;
             if (File.Exists(cacheVersionCodeFilePath) == false)
@@ -198,9 +209,9 @@ namespace WiseyeStudio.Build
                 string cachedVersionCodeString = File.ReadAllText(cacheVersionCodeFilePath);
                 VersionCode cachedVersionCode = VersionCode.Parse(cachedVersionCodeString);
 
-                if (cachedVersionCode.major != VersionCode.major
-                    || cachedVersionCode.minor != VersionCode.minor
-                    || cachedVersionCode.subVersion != VersionCode.subVersion)
+                if (cachedVersionCode.major != versionCode.major
+                    || cachedVersionCode.minor != versionCode.minor
+                    || cachedVersionCode.subVersion != versionCode.subVersion)
                 {
                     buildNumber = 0;
                 }
@@ -210,9 +221,9 @@ namespace WiseyeStudio.Build
                 }
             }
 
-            VersionCode vc = new(VersionCode.major, VersionCode.minor, VersionCode.subVersion, buildNumber, VersionCode.extra);
+            VersionCode vc = new(versionCode.major, versionCode.minor, versionCode.subVersion, buildNumber, versionCode.extra);
 
-            switch (TargetGroup)
+            switch (targetGroup)
             {
                 case BuildTargetGroup.Android:
                     SetVersionCodeAndroid(buildingData, vc);
@@ -231,35 +242,35 @@ namespace WiseyeStudio.Build
             FileIOUtility.SafeWriteAllText(cacheVersionCodeFilePath, $"{vc.major}.{vc.minor}.{vc.subVersion}.{vc.buildNumber}");
         }
 
-        private void SetVersionCodeAndroid(BuildPipelineBuildingData buildingData, VersionCode versionCode)
+        private void SetVersionCodeAndroid(BuildPipelineBuildingData buildingData, VersionCode version)
         {
-            string versionCodeString = $"{versionCode.major}.{versionCode.minor}.{versionCode.subVersion}.{versionCode.buildNumber}";
+            var versionCodeString = $"{version.major}.{version.minor}.{version.subVersion}.{version.buildNumber}";
             PlayerSettings.bundleVersion = versionCodeString;
 #if UNITY_ANDROID
-            PlayerSettings.Android.bundleVersionCode = new VersionCodeConvertor().VersionToInteger(versionCode);
+            PlayerSettings.Android.bundleVersionCode = new VersionCodeConvertor().VersionToInteger(version);
             buildingData.AddReportMessage($"Android Bundle Version Code: {PlayerSettings.Android.bundleVersionCode}");
 #endif
-            buildingData.ResultReport.VersionCode = versionCodeString;
+            buildingData.ResultReport.versionCode = versionCodeString;
             buildingData.AddReportMessage($"Set Version Code: {versionCodeString}");
         }
 
-        private void SetVersionCodeIOS(BuildPipelineBuildingData buildingData, VersionCode versionCode)
+        private void SetVersionCodeIOS(BuildPipelineBuildingData buildingData, VersionCode version)
         {
-            string versionCodeString = $"{versionCode.major}.{versionCode.minor}.{versionCode.subVersion}";
+            var versionCodeString = $"{version.major}.{version.minor}.{version.subVersion}";
             PlayerSettings.bundleVersion = versionCodeString;
-            buildingData.ResultReport.VersionCode = versionCodeString;
+            buildingData.ResultReport.versionCode = versionCodeString;
             buildingData.AddReportMessage($"Set Version Code: {versionCodeString}");
         }
 
-        private void SetVersionCodeStandalone(BuildPipelineBuildingData buildingData, VersionCode versionCode)
+        private void SetVersionCodeStandalone(BuildPipelineBuildingData buildingData, VersionCode version)
         {
-            string versionCodeString = $"{versionCode.major}.{versionCode.minor}.{versionCode.subVersion}.{versionCode.buildNumber}";
-            buildingData.ResultReport.VersionCode = versionCodeString;
+            var versionCodeString = $"{version.major}.{version.minor}.{version.subVersion}.{version.buildNumber}";
+            buildingData.ResultReport.versionCode = versionCodeString;
             buildingData.AddReportMessage($"Set Version Code: {versionCodeString}");
 
-            if (string.IsNullOrWhiteSpace(versionCode.extra) == false)
+            if (string.IsNullOrWhiteSpace(version.extra) == false)
             {
-                versionCodeString += $"-{versionCode.extra}";
+                versionCodeString += $"-{version.extra}";
             }
 
             PlayerSettings.bundleVersion = versionCodeString;
@@ -269,7 +280,7 @@ namespace WiseyeStudio.Build
         [Button]
         private void OpenOutputDirectory()
         {
-            string path = Path.Combine(BuildPipelineFolderPath, "Build", BuildName);
+            var path = Path.Combine(buildPipelineFolderPath, "Build", buildName);
             Debug.Log($"Opening Directory: {path}");
             OpenDirectoryHelper.OpenDirectory(path);
         }

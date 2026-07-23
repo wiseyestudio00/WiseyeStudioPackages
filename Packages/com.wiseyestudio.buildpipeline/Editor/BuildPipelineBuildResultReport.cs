@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using UnityEngine;
-
 using Newtonsoft.Json;
 
 namespace WiseyeStudio.Build
@@ -12,21 +9,21 @@ namespace WiseyeStudio.Build
     public class BuildPipelineBuildResultReport
     {
         [JsonProperty]
-        public bool Success = false;
+        public bool success = false;
         [JsonProperty]
-        public string VersionCode = string.Empty;
+        public string versionCode = string.Empty;
         [JsonProperty]
-        public string BuiltResultPath;
+        public string builtResultPath;
         [JsonProperty]
-        public double BuildTimeInSeconds;
+        public double buildTimeInSeconds;
         [JsonProperty]
-        public List<string> ShareLinks = new();
+        public List<string> shareLinks = new();
         [JsonProperty]
-        public List<string> BuildMessages = new();
+        public List<string> buildMessages = new();
 
         public void AddMessage(string message)
         {
-            BuildMessages.Add(message);
+            buildMessages.Add(message);
         }
 
         public string ToJsonString()
@@ -38,17 +35,17 @@ namespace WiseyeStudio.Build
         {
             StringBuilder stringBuilder = new();
 
-            stringBuilder.AppendLine($"Success: {Success}");
-            stringBuilder.AppendLine($"Version Code: {VersionCode}");
-            stringBuilder.AppendLine($"BuiltResultPath: {BuiltResultPath}");
-            stringBuilder.AppendLine($"BuildTimeInSeconds: {BuildTimeInSeconds}");
+            stringBuilder.AppendLine($"Success: {success}");
+            stringBuilder.AppendLine($"Version Code: {versionCode}");
+            stringBuilder.AppendLine($"BuiltResultPath: {builtResultPath}");
+            stringBuilder.AppendLine($"BuildTimeInSeconds: {buildTimeInSeconds}");
             stringBuilder.AppendLine($"=========== ShareLinks =========== ");
-            foreach (var link in ShareLinks)
+            foreach (var link in shareLinks)
             {
                 stringBuilder.AppendLine($"{link}");
             }
             stringBuilder.AppendLine($"=========== BuildMessages =========== ");
-            foreach (var message in BuildMessages)
+            foreach (var message in buildMessages)
             {
                 stringBuilder.AppendLine($"{message}");
             }

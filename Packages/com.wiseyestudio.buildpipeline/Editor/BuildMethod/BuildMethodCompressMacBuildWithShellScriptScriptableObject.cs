@@ -31,7 +31,7 @@ namespace WiseyeStudio.Build.BuildMethod
                 },
                 builtAppPath, buildingData.TargetZippedBuildFilePath);
 
-            buildingData.ResultReport.BuiltResultPath = buildingData.TargetZippedBuildFilePath;
+            buildingData.ResultReport.builtResultPath = buildingData.TargetZippedBuildFilePath;
             buildingData.AddReportMessage($"Compressed Mac Build: {absoluteShellScriptPath} {@builtAppPath} {@buildingData.TargetZippedBuildFilePath}");
         }
     }
