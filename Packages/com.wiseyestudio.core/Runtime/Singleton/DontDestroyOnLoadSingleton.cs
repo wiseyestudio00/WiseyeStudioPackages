@@ -10,9 +10,9 @@ namespace WiseyeStudio.Singleton
         [Title("Singleton Setting")]
         [SerializeField] public bool _DestroyWhenRestart = true;
         
+        public static T Instance { get; private set; }
         public bool DestroyWhenRestart => _DestroyWhenRestart;
 
-        public static T Instance;
         public void TryCreateInstance()
         {
             if (Instance != null && Instance != this)
@@ -30,7 +30,7 @@ namespace WiseyeStudio.Singleton
             return Instance.gameObject;
         }
 
-        void Awake()
+        private void Awake()
         {
             TryCreateInstance();
         }
