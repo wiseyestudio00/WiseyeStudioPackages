@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace WiseyeStudio.DataProvider
 {
@@ -8,11 +9,12 @@ namespace WiseyeStudio.DataProvider
         order = AssetMenuConstants.Order.StringSo)]
     public class StringScriptableObject : ScriptableObject, IDataProvider<string>
     {
-        [SerializeField] private string _string;
+        [FormerlySerializedAs("_string")]
+        [SerializeField] private string value;
 
         public string GetData()
         {
-            return _string;
+            return value;
         }
     }
 }

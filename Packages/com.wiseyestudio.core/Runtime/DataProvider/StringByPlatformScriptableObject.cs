@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace WiseyeStudio.DataProvider
 {
@@ -10,31 +11,30 @@ namespace WiseyeStudio.DataProvider
     public class StringByPlatformScriptableObject : ScriptableObject, IDataProvider<string>
     {
         [Tooltip("This string will be used if the platform string does not exist/empty")]
-        [Required]
-        [SerializeField] string DefaultString;
+        [FormerlySerializedAs("DefaultString")]
+        [Required, SerializeField] private string defaultString;
 
-        [Required]
-        [SerializeField] string MacString;
-        [Required]
-        [SerializeField] string WindowsString;
+        [FormerlySerializedAs("WindowsString")]
+        [Required, SerializeField] private string windowsString;
+        [FormerlySerializedAs("MacString")]
+        [Required, SerializeField] private string macString;
 
         public string GetData()
         {
-            // return the playform specific string if it exists (is not empty/null)
+            // return the platform specific string if it exists (is not empty/null)
             // otherwise return the default string
-            return string.IsNullOrEmpty(GetPlatformString()) ? DefaultString : GetPlatformString();
+            return string.IsNullOrEmpty(GetPlatformString()) ? defaultString : GetPlatformString();
         }
 
         private string GetPlatformString()
         {
-            // use switch statement to avoid multiple if-else statements
             return Application.platform switch
             {
-                RuntimePlatform.OSXPlayer => MacString,
-                RuntimePlatform.OSXEditor => MacString,
-                RuntimePlatform.WindowsPlayer => WindowsString,
-                RuntimePlatform.WindowsEditor => WindowsString,
-                _ => DefaultString,
+                RuntimePlatform.OSXPlayer => macString,
+                RuntimePlatform.OSXEditor => macString,
+                RuntimePlatform.WindowsPlayer => windowsString,
+                RuntimePlatform.WindowsEditor => windowsString,
+                _ => defaultString,
             };
         }
     }
