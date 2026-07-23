@@ -17,9 +17,9 @@ Install these packages via UPM by entering the git URL.
 
 | Package | Description |
 | --- | --- |
-| [com.wiseyestudio.core](Packages/com.wiseyestudio.core/README.md) | https://github.com/wiseyestudio00/WiseyeStudioPackages.git?path=Packages/com.wiseyestudio.core |
-| [com.wiseyestudio.buildpipeline](Packages/com.wiseyestudio.buildpipeline/README.md) | https://github.com/wiseyestudio00/WiseyeStudioPackages.git?path=Packages/com.wiseyestudio.buildpipeline |
-| [com.wiseyestudio.steam](Packages/com.wiseyestudio.steam/README.md) | https://github.com/wiseyestudio00/WiseyeStudioPackages.git?path=Packages/com.wiseyestudio.steam |
+| [com.wiseyestudio.core](Packages/com.wiseyestudio.core/README.md) | `https://github.com/wiseyestudio00/WiseyeStudioPackages.git?path=Packages/com.wiseyestudio.core` |
+| [com.wiseyestudio.buildpipeline](Packages/com.wiseyestudio.buildpipeline/README.md) | `https://github.com/wiseyestudio00/WiseyeStudioPackages.git?path=Packages/com.wiseyestudio.buildpipeline` |
+| [com.wiseyestudio.steam](Packages/com.wiseyestudio.steam/README.md) | `https://github.com/wiseyestudio00/WiseyeStudioPackages.git?path=Packages/com.wiseyestudio.steam` |
 
 To pin a specific release, append a tag to the URL, e.g. `...?path=Packages/com.wiseyestudio.steam#v0.1.2`.
 
