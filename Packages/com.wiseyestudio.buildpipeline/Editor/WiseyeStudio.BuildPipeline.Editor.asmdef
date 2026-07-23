@@ -1,0 +1,22 @@
+{
+    "name": "WiseyeStudio.BuildPipeline.Editor",
+    "rootNamespace": "",
+    "references": [
+        "WiseyeStudio.Core",
+        "UniTask",
+        "Unity.Addressables",
+        "Unity.Addressables.Editor",
+        "Unity.ScriptableBuildPipeline.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

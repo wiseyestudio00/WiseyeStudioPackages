@@ -1,0 +1,21 @@
+{
+  "name": "com.wiseyestudio.steam",
+  "version": "0.1.2",
+  "displayName": "Wiseye Studio Steamworks",
+  "description": "UniTask-based Steamworks.NET wrapper: init, stats, achievements, leaderboards, friends, avatars.",
+  "unity": "2022.3",
+  "license": "MIT",
+  "author": {
+    "name": "Wiseye Studio",
+    "email": "sherwinnie@wiseyestudio.com"
+  },
+  "documentationUrl": "https://github.com/wiseyestudio00/WiseyeStudioPackages/blob/main/Packages/com.wiseyestudio.steam/README.md",
+  "changelogUrl": "https://github.com/wiseyestudio00/WiseyeStudioPackages/blob/main/Packages/com.wiseyestudio.steam/CHANGELOG.md",
+  "keywords": [
+    "steam",
+    "steamworks",
+    "leaderboard",
+    "achievements",
+    "unitask"
+  ]
+}
