@@ -1,6 +1,6 @@
 {
   "name": "com.wiseyestudio.steam",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "displayName": "Wiseye Studio Steamworks",
   "description": "UniTask-based Steamworks.NET wrapper: init, stats, achievements, leaderboards, friends, avatars.",
   "unity": "2022.3",

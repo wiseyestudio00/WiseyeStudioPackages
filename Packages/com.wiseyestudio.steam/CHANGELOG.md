@@ -5,6 +5,16 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-08-08
+
+### Added
+
+- `SteamAppsManager`, exposed as `SteamworksManager.Instance.Apps` and disposed with the other
+  managers on shutdown. It wraps the ownership and installation parts of ISteamApps:
+  `IsAppInstalled`, `IsDlcInstalled`, `IsSubscribed` (for the current app and for a given app),
+  `IsSubscribedFromFamilySharing`, `IsSubscribedFromFreeWeekend`, `IsLowViolence`, `IsVacBanned`
+  and `GetAppOwnerSteamId`.
+
 ## [0.1.2] - 2026-07-22
 
 ### Fixed

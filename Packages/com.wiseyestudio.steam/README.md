@@ -1,6 +1,6 @@
 # Wiseye Studio Steamworks Package
 
-A UniTask-based [Steamworks.NET](https://github.com/rlabrecque/Steamworks.NET) wrapper for Unity: initialization, stats, achievements, leaderboards, friends and avatars — exposed as awaitable, cancellable async APIs.
+A UniTask-based [Steamworks.NET](https://github.com/rlabrecque/Steamworks.NET) wrapper for Unity: initialization, stats, achievements, leaderboards, friends and avatars, app ownership and license checks — exposed as awaitable, cancellable async APIs.
 
 > [!WARNING]
 > **Not recommended for use in other commercial projects (yet).**
@@ -75,6 +75,7 @@ if (steam.Available)
     await steam.Player.SetAchievementAsync("ACH_NAME", ct);
     await steam.UserStats.SubmitScoreAsync("leaderboard_id", score, details, ct);
     Sprite avatar = await steam.Friends.GetUserAvatarAsync(friendSteamId, ct);
+    bool ownsDlc = steam.Apps.IsDlcInstalled(dlcAppId);
 }
 ```
 

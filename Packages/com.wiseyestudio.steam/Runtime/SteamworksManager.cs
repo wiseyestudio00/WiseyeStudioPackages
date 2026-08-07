@@ -4,6 +4,7 @@
 
 using System;
 using UnityEngine;
+using WiseyeStudio.Steam.Apps;
 using WiseyeStudio.Steam.Friends;
 using WiseyeStudio.Steam.UserStats;
 
@@ -45,7 +46,8 @@ namespace WiseyeStudio.Steam
         public SteamPlayerManager Player { get; private set; }
         public SteamUserStatsManager UserStats { get; private set; }
         public SteamFriendsManager Friends { get; private set; }
-        
+        public SteamAppsManager Apps { get; private set; }
+
 #if ENABLE_STEAMWORKS
         // I don't know what this is. It is from the original SteammManager.cs from Steamworks.Net
         private SteamAPIWarningMessageHook_t _steamAPIWarningMessageHook;
@@ -134,6 +136,7 @@ namespace WiseyeStudio.Steam
                 Player = new SteamPlayerManager();
                 UserStats  = new SteamUserStatsManager();
                 Friends =  new SteamFriendsManager();
+                Apps = new SteamAppsManager();
             }
             
             _alreadyTriedInitialize = true;
@@ -153,9 +156,11 @@ namespace WiseyeStudio.Steam
             Player?.Dispose();
             UserStats?.Dispose();
             Friends?.Dispose();
+            Apps?.Dispose();
             Player = null;
             UserStats = null;
             Friends = null;
+            Apps = null;
             _available = false;
 
             SteamAPI.Shutdown();
