@@ -5,6 +5,24 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-08-09
+
+### Added
+
+- `SteamUtilsManager`, exposed as `SteamworksManager.Instance.Utils` and disposed with the other
+  managers on shutdown. It wraps the callback-free parts of ISteamUtils: app/session info
+  (`GetAppId`, `GetServerRealTime`, `GetIpCountry`, `GetSteamUiLanguage`, `GetSecondsSinceAppActive`,
+  `GetSecondsSinceComputerActive`, `GetCurrentBatteryPower`, `GetIpcCallCount`), environment checks
+  (`IsOverlayEnabled`, `OverlayNeedsPresent`, `IsSteamChinaLauncher`, `IsSteamInBigPictureMode`,
+  `IsSteamRunningInVr`, `IsSteamRunningOnSteamDeck`, `IsVrHeadsetStreamingEnabled`), overlay, VR and
+  launcher control (`SetOverlayNotificationPosition`, `SetOverlayNotificationInset`,
+  `SetVrHeadsetStreamingEnabled`, `StartVrDashboard`, `SetGameLauncherMode`), image helpers
+  (`GetImageSize`, `GetImageRgba`) and text filtering (`InitFilterText`, `FilterText`).
+- Awaitable gamepad text input: `ShowGamepadTextInputAsync` opens the Big Picture text input dialog
+  and returns the entered text (or null on cancel), `ShowFloatingGamepadTextInputAsync` opens the
+  floating keyboard and completes when it is dismissed. Both are cancellable and resolve through the
+  Steam dismissed callbacks internally.
+
 ## [0.2.0] - 2026-08-08
 
 ### Added

@@ -7,6 +7,7 @@ using UnityEngine;
 using WiseyeStudio.Steam.Apps;
 using WiseyeStudio.Steam.Friends;
 using WiseyeStudio.Steam.UserStats;
+using WiseyeStudio.Steam.Utils;
 
 #if ENABLE_STEAMWORKS
 using Steamworks;
@@ -47,6 +48,7 @@ namespace WiseyeStudio.Steam
         public SteamUserStatsManager UserStats { get; private set; }
         public SteamFriendsManager Friends { get; private set; }
         public SteamAppsManager Apps { get; private set; }
+        public SteamUtilsManager Utils { get; private set; }
 
 #if ENABLE_STEAMWORKS
         // I don't know what this is. It is from the original SteammManager.cs from Steamworks.Net
@@ -137,6 +139,7 @@ namespace WiseyeStudio.Steam
                 UserStats  = new SteamUserStatsManager();
                 Friends =  new SteamFriendsManager();
                 Apps = new SteamAppsManager();
+                Utils = new SteamUtilsManager();
             }
             
             _alreadyTriedInitialize = true;
@@ -157,10 +160,12 @@ namespace WiseyeStudio.Steam
             UserStats?.Dispose();
             Friends?.Dispose();
             Apps?.Dispose();
+            Utils?.Dispose();
             Player = null;
             UserStats = null;
             Friends = null;
             Apps = null;
+            Utils = null;
             _available = false;
 
             SteamAPI.Shutdown();
