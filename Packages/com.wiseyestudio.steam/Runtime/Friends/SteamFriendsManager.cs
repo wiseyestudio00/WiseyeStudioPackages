@@ -35,6 +35,18 @@ namespace WiseyeStudio.Steam.Friends
 #endif
             return null;
         }
+
+        /// <summary>
+        /// Opens the Steam Overlay on the store page of the given app. Does nothing when the
+        /// overlay is disabled; check <c>Utils.IsOverlayEnabled()</c> and fall back to a
+        /// <c>steam://url/StoreAppPage/</c> URL in that case.
+        /// </summary>
+        public void OpenStorePageInOverlay(uint appId)
+        {
+#if ENABLE_STEAMWORKS
+            SteamFriends.ActivateGameOverlayToStore(new AppId_t(appId), EOverlayToStoreFlag.k_EOverlayToStoreFlag_None);
+#endif
+        }
         
 #if ENABLE_STEAMWORKS
         private async UniTask<string> GetUserPersonaNameAsync(CSteamID steamId, CancellationToken cancellationToken)

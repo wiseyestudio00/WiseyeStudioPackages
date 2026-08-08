@@ -5,6 +5,15 @@ All notable changes to this package will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-08-09
+
+### Added
+
+- `SteamFriendsManager.OpenStorePageInOverlay`: opens the Steam Overlay on the store page of a
+  given app (e.g. a DLC), wrapping `ISteamFriends::ActivateGameOverlayToStore`. No-op when the
+  overlay is disabled; callers should check `Utils.IsOverlayEnabled()` and fall back to a
+  `steam://url/StoreAppPage/` URL.
+
 ## [0.3.0] - 2026-08-09
 
 ### Added
