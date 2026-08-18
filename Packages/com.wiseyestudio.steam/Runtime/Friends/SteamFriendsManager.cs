@@ -18,8 +18,28 @@ namespace WiseyeStudio.Steam.Friends
     {
 #if ENABLE_STEAMWORKS
         private readonly Dictionary<CSteamID, ISteamFriendsInformationAccessor> _accessors = new Dictionary<CSteamID, ISteamFriendsInformationAccessor>();
+        private readonly Callback<GameOverlayActivated_t> _gameOverlayActivatedCallback;
 #endif
-        
+
+        /// <summary>
+        /// Raised when the Steam Overlay is opened (true) or closed (false).
+        /// </summary>
+        public event Action<bool> GameOverlayActivated;
+
+        internal SteamFriendsManager()
+        {
+#if ENABLE_STEAMWORKS
+            _gameOverlayActivatedCallback = Callback<GameOverlayActivated_t>.Create(OnGameOverlayActivated);
+#endif
+        }
+
+#if ENABLE_STEAMWORKS
+        private void OnGameOverlayActivated(GameOverlayActivated_t callback)
+        {
+            GameOverlayActivated?.Invoke(callback.m_bActive != 0);
+        }
+#endif
+
         public async UniTask<string> GetUserPersonaNameAsync(ulong steamId, CancellationToken cancellationToken)
         {
 #if ENABLE_STEAMWORKS
@@ -72,6 +92,7 @@ namespace WiseyeStudio.Steam.Friends
 
         public void Dispose()
         {
+            GameOverlayActivated = null;
 #if ENABLE_STEAMWORKS
             foreach (var accessor in _accessors.Values)
             {
