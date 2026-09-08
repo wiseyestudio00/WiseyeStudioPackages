@@ -19,6 +19,8 @@ namespace WiseyeStudio.Steam.UserStats
         private readonly ELeaderboardDisplayType _displayType;
 
         private SteamLeaderboard_t? _leaderboard;
+        // Ensures concurrent cold requests issue only one FindOrCreateLeaderboard round trip.
+        private readonly SemaphoreSlim _findGate = new SemaphoreSlim(1, 1);
         // Canceled on Dispose to avoid hanging task
         private readonly CancellationTokenSource _disposeCts = new CancellationTokenSource();
 
@@ -52,18 +54,30 @@ namespace WiseyeStudio.Steam.UserStats
             {
                 using var linkedCts =
                     CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, _disposeCts.Token);
-                var handle = SteamUserStats.FindOrCreateLeaderboard(_leaderboardId, _sortMethod, _displayType);
-                var callback = await handle.ToUniTask<LeaderboardFindResult_t>(linkedCts.Token);
 
-                if (callback.m_bLeaderboardFound == 1)
+                // Concurrent cold callers queue here; all but the first find the handle already cached.
+                await _findGate.WaitAsync(linkedCts.Token);
+                try
                 {
-                    Debug.Log($"Successfully found/created leaderboard: {_leaderboardId}");
-                    _leaderboard = callback.m_hSteamLeaderboard;
-                    return true;
-                }
+                    if (_leaderboard.HasValue) return true;
 
-                Debug.LogError($"Failed to find/create leaderboard: {_leaderboardId}");
-                return false;
+                    var handle = SteamUserStats.FindOrCreateLeaderboard(_leaderboardId, _sortMethod, _displayType);
+                    var callback = await handle.ToUniTask<LeaderboardFindResult_t>(linkedCts.Token);
+
+                    if (callback.m_bLeaderboardFound == 1)
+                    {
+                        Debug.Log($"Successfully found/created leaderboard: {_leaderboardId}");
+                        _leaderboard = callback.m_hSteamLeaderboard;
+                        return true;
+                    }
+
+                    Debug.LogError($"Failed to find/create leaderboard: {_leaderboardId}");
+                    return false;
+                }
+                finally
+                {
+                    _findGate.Release();
+                }
             }
             catch (OperationCanceledException)
             {
