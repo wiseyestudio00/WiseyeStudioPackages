@@ -276,6 +276,14 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.wiseyestudio.localization": {
+      "version": "file:com.wiseyestudio.localization",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.ugui": "2.0.0"
+      }
+    },
     "com.wiseyestudio.steam": {
       "version": "file:com.wiseyestudio.steam",
       "depth": 0,
