@@ -62,14 +62,5 @@ namespace WiseyeStudio.Localization
         }
 
         private void OnLanguageChanged(SystemLanguage language) => Refresh();
-
-#if UNITY_EDITOR
-        [ShowInInspector, ReadOnly, MultiLineProperty, ShowIf("@localizedText != null")]
-        private string Preview => localizedText.Get(PreviewLanguage);
-
-        private static SystemLanguage PreviewLanguage => LocalizationManager.Instance != null
-            ? LocalizationManager.Instance.CurrentLanguage
-            : LocalizationSettings.Instance.DefaultLanguage;
-#endif
     }
 }

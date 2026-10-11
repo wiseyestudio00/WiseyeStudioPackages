@@ -115,7 +115,9 @@ namespace WiseyeStudio.Localization
             return KeyTagRegex.Replace(text, match =>
             {
                 var key = match.Groups[1].Value;
-                return ContainsKey(key) ? GetString(key, language) : match.Value;
+                return TryGetString(key, language, out var value) || TryGetString(key, _fallbackLanguage, out value)
+                    ? value
+                    : match.Value;
             });
         }
 

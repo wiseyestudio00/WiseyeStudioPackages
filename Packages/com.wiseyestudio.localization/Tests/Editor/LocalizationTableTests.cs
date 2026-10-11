@@ -103,6 +103,14 @@ namespace WiseyeStudio.Localization.Tests
         }
 
         [Test]
+        public void ReplaceKeyedTagsLeavesTagWhenKeyHasNoText()
+        {
+            var table = Parse("empty,,,", false);
+
+            Assert.AreEqual("{empty}!", table.ReplaceKeyedTags("{empty}!", SystemLanguage.English));
+        }
+
+        [Test]
         public void ReplaceKeyedTagsReplacesKnownKeysOnly()
         {
             var table = Parse("perfect,Perfect,完美,パーフェクト", false);

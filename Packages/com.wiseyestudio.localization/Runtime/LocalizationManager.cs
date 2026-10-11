@@ -7,13 +7,15 @@ namespace WiseyeStudio.Localization
     [DefaultExecutionOrder(-1000)]
     public class LocalizationManager : DontDestroyOnLoadSingleton<LocalizationManager>
     {
+        private static bool _hasLoggedMissingManager;
+
         private SystemLanguage? _currentLanguage;
 
         public event Action<SystemLanguage> LanguageChanged;
 
         public LocalizationSettings Settings => LocalizationSettings.Instance;
 
-        public SystemLanguage CurrentLanguage => _currentLanguage ??= Settings.DefaultLanguage;
+        public SystemLanguage CurrentLanguage => _currentLanguage ??= Settings.FallbackLanguage;
 
         public void SetLanguage(SystemLanguage language)
         {
@@ -39,8 +41,19 @@ namespace WiseyeStudio.Localization
                 return Instance.CurrentLanguage;
             }
 
-            Debug.LogError($"No {nameof(LocalizationManager)} in the scene; using English.");
+            if (!_hasLoggedMissingManager)
+            {
+                Debug.LogError($"No {nameof(LocalizationManager)} in the scene; using English.");
+                _hasLoggedMissingManager = true;
+            }
+
             return SystemLanguage.English;
+        }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics()
+        {
+            _hasLoggedMissingManager = false;
         }
     }
 }

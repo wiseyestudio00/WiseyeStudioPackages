@@ -114,7 +114,11 @@ namespace WiseyeStudio.Localization
             Application.OpenURL($"https://docs.google.com/spreadsheets/d/{sheetId}/edit?gid={gid}#gid={gid}");
         }
 
-        [Button, EnableIf(nameof(HasSheet))]
+        [NonSerialized] private bool _isSyncing;
+
+        private bool CanSync => HasSheet && !_isSyncing;
+
+        [Button, EnableIf(nameof(CanSync))]
         public async UniTask<bool> SyncAsync()
         {
             if (!HasSheet)
@@ -123,6 +127,25 @@ namespace WiseyeStudio.Localization
                 return false;
             }
 
+            if (_isSyncing)
+            {
+                Debug.LogWarning($"{name}: a sync is already running.", this);
+                return false;
+            }
+
+            _isSyncing = true;
+            try
+            {
+                return await SyncUnguardedAsync();
+            }
+            finally
+            {
+                _isSyncing = false;
+            }
+        }
+
+        private async UniTask<bool> SyncUnguardedAsync()
+        {
             string downloaded;
             try
             {
@@ -138,8 +161,16 @@ namespace WiseyeStudio.Localization
                 ? AssetDatabase.GetAssetPath(csv)
                 : Path.ChangeExtension(AssetDatabase.GetAssetPath(this), ".csv");
 
-            File.WriteAllText(csvPath, downloaded);
-            AssetDatabase.ImportAsset(csvPath);
+            try
+            {
+                File.WriteAllText(csvPath, downloaded);
+                AssetDatabase.ImportAsset(csvPath);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError($"{name}: couldn't write {csvPath}. {exception.Message}", this);
+                return false;
+            }
 
             if (csv == null)
             {

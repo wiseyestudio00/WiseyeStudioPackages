@@ -27,15 +27,13 @@ namespace WiseyeStudio.Localization
             SystemLanguage.Korean,
         };
 
-        [Tooltip("Used when a translation is missing, and when the system language isn't supported.")]
+        [Tooltip("Used when a translation is missing, as the starting language, and for edit-mode previews.")]
+        [ValueDropdown(nameof(languages))]
         [ValidateInput(nameof(IsSupported), "The fallback language must be in the language list.")]
         [SerializeField] private SystemLanguage fallbackLanguage = SystemLanguage.English;
 
         public IReadOnlyList<SystemLanguage> Languages => languages;
         public SystemLanguage FallbackLanguage => fallbackLanguage;
-
-        public SystemLanguage DefaultLanguage =>
-            IsSupported(Application.systemLanguage) ? Application.systemLanguage : fallbackLanguage;
 
         public static LocalizationSettings Instance
         {

@@ -28,6 +28,8 @@ namespace WiseyeStudio.Localization
         [TableList]
         [SerializeField] private List<Entry> entries = new();
 
+        [NonSerialized] private bool _hasWarnedMissingValue;
+
         public IReadOnlyList<Entry> Entries => entries;
 
         private static T MissingValue => typeof(T) == typeof(string) ? (T)(object)string.Empty : default;
@@ -41,7 +43,19 @@ namespace WiseyeStudio.Localization
                 return value;
             }
 
-            return TryGet(LocalizationSettings.Instance.FallbackLanguage, out value) ? value : MissingValue;
+            var fallbackLanguage = LocalizationSettings.Instance.FallbackLanguage;
+            if (TryGet(fallbackLanguage, out value))
+            {
+                return value;
+            }
+
+            if (!_hasWarnedMissingValue)
+            {
+                Debug.LogWarning($"{nameof(LocalizedValue<T>)}<{typeof(T).Name}> has no value for {language} or the fallback language {fallbackLanguage}.");
+                _hasWarnedMissingValue = true;
+            }
+
+            return MissingValue;
         }
 
         public bool TryGet(SystemLanguage language, out T value)

@@ -29,7 +29,7 @@ Create one with **Create › Wiseye Studio › Localization › Localization Set
 | Field | Default | Used for |
 | --- | --- | --- |
 | Languages | English, ChineseTraditional, ChineseSimplified, Japanese, Korean | The supported languages, and the column order of tables without a header row |
-| Fallback Language | English | Used when a translation is missing, and when the system language isn't supported |
+| Fallback Language | English | Used when a translation is missing, as the manager's starting language, and for edit-mode previews. Only languages in the list can be picked |
 
 Without the asset, the package logs a warning and uses the defaults.
 
@@ -45,7 +45,7 @@ manager.LanguageChanged += OnLanguageChanged;
 var settings = manager.Settings;
 ```
 
-`CurrentLanguage` starts as the system language if it's supported, otherwise the fallback language. The manager doesn't save the player's choice; call `SetLanguage` from your own settings code at startup.
+`CurrentLanguage` starts as the fallback language. The manager doesn't save the player's choice or read the system language; call `SetLanguage` from your own settings code at startup (for example with the saved choice, or `Application.systemLanguage` on first launch).
 
 Lookups that don't take a language use `CurrentLanguage`. Without a manager in the scene they log an error and use English.
 
@@ -112,7 +112,7 @@ Or use a concrete type directly with `[SerializeField]` in any MonoBehaviour or 
 [SerializeField] private LocalizedValue<Sprite> logo;
 ```
 
-In `LocalizedValue<T>`, empty strings, null and destroyed objects count as missing and fall back to the fallback language.
+In `LocalizedValue<T>`, empty strings, null and destroyed objects count as missing and fall back to the fallback language. If that is missing too, it returns an empty string (or `null`) and logs one warning per value.
 
 On IL2CPP platforms, Odin-serialized generic types must be covered by Odin's AOT generation (**Tools › Odin › Preferences › Serialization › AOT Generation**) or they fail to load in builds.
 
