@@ -8,6 +8,7 @@ Unity packages shared across Wiseye Studio projects, installable via UPM git URL
 | [com.wiseyestudio.buildpipeline](Packages/com.wiseyestudio.buildpipeline/README.md) | ScriptableObject-based batch build pipeline with composable build methods |
 | [com.wiseyestudio.steam](Packages/com.wiseyestudio.steam/README.md) | UniTask-based Steamworks.NET wrapper: init, stats, achievements, leaderboards, friends, avatars |
 | [com.wiseyestudio.localization](Packages/com.wiseyestudio.localization/README.md) | CSV localization tables synced from Google Sheets, localized values and a TextMeshPro text component |
+| [com.wiseyestudio.texturepadder](Packages/com.wiseyestudio.texturepadder/README.md) | Editor tool that pads PNGs in place so their imported size (after Max Size) can be block-compressed |
 
 > [!WARNING]
 > These packages are not well written or well maintained - We just released these packages for easier internal access. Wiseye Studio does not recommend other developers to depend on these packages.
@@ -22,6 +23,7 @@ Install these packages via UPM by entering the git URL.
 | [com.wiseyestudio.buildpipeline](Packages/com.wiseyestudio.buildpipeline/README.md) | `https://github.com/wiseyestudio00/WiseyeStudioPackages.git?path=Packages/com.wiseyestudio.buildpipeline` |
 | [com.wiseyestudio.steam](Packages/com.wiseyestudio.steam/README.md) | `https://github.com/wiseyestudio00/WiseyeStudioPackages.git?path=Packages/com.wiseyestudio.steam` |
 | [com.wiseyestudio.localization](Packages/com.wiseyestudio.localization/README.md) | `https://github.com/wiseyestudio00/WiseyeStudioPackages.git?path=Packages/com.wiseyestudio.localization` |
+| [com.wiseyestudio.texturepadder](Packages/com.wiseyestudio.texturepadder/README.md) | `https://github.com/wiseyestudio00/WiseyeStudioPackages.git?path=Packages/com.wiseyestudio.texturepadder` |
 
 To pin a specific release, append a tag to the URL, e.g. `...?path=Packages/com.wiseyestudio.steam#v0.1.2`.
 
