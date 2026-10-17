@@ -146,6 +146,11 @@ namespace WiseyeStudio.TexturePadder.Editor
                         "Sprite sheets with Slice on Import get re-sliced on every import, which would undo the rect shift. " +
                         "When on, the flag is turned off and the current rects are kept (shifted)."),
                     options.turnOffSliceOnImport);
+                options.adjustSinglePivot = EditorGUILayout.Toggle(
+                    new GUIContent("Adjust Single sprite pivot",
+                        "Off: the pivot keeps its value (Center stays Center), so the padding is split around it. " +
+                        "On: the pivot moves so it stays on the same content pixel when padding is uneven."),
+                    options.adjustSinglePivot);
                 options.backup = EditorGUILayout.Toggle(
                     new GUIContent("Back up originals", $"Copies the PNG and .meta to <project>/{TexturePadderCore.BackupRoot}/ first."),
                     options.backup);

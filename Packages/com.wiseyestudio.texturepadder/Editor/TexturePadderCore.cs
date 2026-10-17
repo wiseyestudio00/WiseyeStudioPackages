@@ -82,7 +82,7 @@ namespace WiseyeStudio.TexturePadder.Editor
                 importer = (TextureImporter)AssetImporter.GetAtPath(entry.Path);
                 if (isSprite)
                 {
-                    ShiftSpriteData(importer, entry.Source, entry.Proposed, padding);
+                    ShiftSpriteData(importer, entry.Source, entry.Proposed, padding, options.adjustSinglePivot);
                 }
             }
 
@@ -203,7 +203,8 @@ namespace WiseyeStudio.TexturePadder.Editor
             return null;
         }
 
-        private static void ShiftSpriteData(TextureImporter importer, Vector2Int oldSize, Vector2Int newSize, Padding padding)
+        private static void ShiftSpriteData(TextureImporter importer, Vector2Int oldSize, Vector2Int newSize, Padding padding,
+            bool adjustSinglePivot)
         {
             var provider = GetProvider(importer);
             if (provider == null)
@@ -222,17 +223,20 @@ namespace WiseyeStudio.TexturePadder.Editor
             }
             else if (rects.Length > 0)
             {
-                // Single sprite: the rect is the whole texture, so it grows. Keep the pivot and the
-                // 9-slice lines on the same content pixels.
+                // Single sprite: the rect is the whole texture, so it grows. The 9-slice lines stay on the same
+                // content pixels; the pivot keeps its value unless asked to stay on the same content pixel.
                 var sprite = rects[0];
-                var oldPivot = PivotOf(sprite.alignment, sprite.pivot);
-                var pivotPixels = Vector2.Scale(oldPivot, oldSize);
-                var newPivot = new Vector2((pivotPixels.x + padding.Left) / newSize.x, (pivotPixels.y + padding.Bottom) / newSize.y);
-                if ((oldPivot - newPivot).sqrMagnitude > 1e-8f)
+                if (adjustSinglePivot)
                 {
-                    sprite.alignment = SpriteAlignment.Custom;
+                    var oldPivot = PivotOf(sprite.alignment, sprite.pivot);
+                    var pivotPixels = Vector2.Scale(oldPivot, oldSize);
+                    var newPivot = new Vector2((pivotPixels.x + padding.Left) / newSize.x, (pivotPixels.y + padding.Bottom) / newSize.y);
+                    if ((oldPivot - newPivot).sqrMagnitude > 1e-8f)
+                    {
+                        sprite.alignment = SpriteAlignment.Custom;
+                    }
+                    sprite.pivot = newPivot;
                 }
-                sprite.pivot = newPivot;
                 if (sprite.border != Vector4.zero)
                 {
                     sprite.border += new Vector4(padding.Left, padding.Bottom, padding.Right, padding.Top);

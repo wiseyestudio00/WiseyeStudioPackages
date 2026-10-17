@@ -32,6 +32,7 @@ It depends on `com.unity.2d.sprite`, which UPM installs automatically.
 | Mipmapped textures | Pad to power of two | Mipmapped non-power-of-two textures never compress. Pad to POT, or pad to ×4 and turn mipmaps off |
 | Skip Sprite Atlas members | On | Packed sprites ship inside the atlas texture, so their own compression doesn't matter |
 | Turn off Slice on Import | Off | Sheets with Slice on Import re-slice on every import and would lose the rect shift. When on, the flag is turned off and the current rects are kept |
+| Adjust Single sprite pivot | Off | Off: a Single sprite's pivot keeps its value (Center stays Center). On: the pivot moves so it stays on the same content pixel |
 | Back up originals | On | Copies the PNG and .meta before writing |
 | Warn on import | Off | Logs a Console warning whenever a texture imports at a size that blocks compression |
 
@@ -41,15 +42,17 @@ It depends on `com.unity.2d.sprite`, which UPM installs automatically.
 | --- | --- |
 | Any | PNG pixels: the original is copied in, padding around it |
 | Sprite (Multiple) | Every rect is shifted by the left/bottom padding; pivots, borders and outlines are rect-relative and unchanged |
-| Sprite (Single) | The rect grows to the full texture; the pivot and 9-slice border move so they stay on the same content pixels; custom outline and physics shape are shifted |
+| Sprite (Single) | The rect grows to the full texture; the 9-slice border moves so it stays on the same content pixels; custom outline and physics shape are shifted. The pivot is left as is unless **Adjust Single sprite pivot** is on |
 | Mipmapped NPOT | Padded to power of two, or mipmaps turned off |
 
 It refuses non-PNG files (PSD, TGA, JPG…), sprites with 2D Animation bones or meshes, read-only files, and sheets
 with Slice on Import on (unless the option is enabled).
 
 A Single sprite's rect now includes the padding. A UI `Image` stretched to its RectTransform draws the transparent strip
-as part of the sprite, so the art looks slightly smaller. World-space `SpriteRenderer`s aren't affected (same pixels
-per unit, same pivot pixel).
+as part of the sprite, so the art looks slightly smaller. In a world-space `SpriteRenderer` the art keeps its size (same
+pixels per unit). With the pivot left as is, the art can move by the uneven part of the padding (none for a centred
+pivot with centred padding, which splits evenly or leaves a 1 px difference); turn on **Adjust Single sprite pivot** to
+keep it exactly in place.
 
 ## Compression rules it follows
 

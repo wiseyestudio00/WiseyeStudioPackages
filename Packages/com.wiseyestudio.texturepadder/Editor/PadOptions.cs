@@ -12,6 +12,7 @@ namespace WiseyeStudio.TexturePadder.Editor
         public MipmapHandling mipmapHandling = MipmapHandling.PadToPowerOfTwo;
         public bool skipAtlasPacked = true;
         public bool turnOffSliceOnImport;
+        public bool adjustSinglePivot;
         public bool backup = true;
     }
 }

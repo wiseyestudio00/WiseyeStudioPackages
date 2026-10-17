@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.0] - 2026-10-18
+
+- Padding no longer changes a Single sprite's pivot by default; the pivot keeps its value and the texture just grows.
+- New **Adjust Single sprite pivot** option (off by default) for the old behaviour: move the pivot so it stays on the same content pixel.
+
 ## [0.1.0] - 2026-10-18
 
 - Initial release.
