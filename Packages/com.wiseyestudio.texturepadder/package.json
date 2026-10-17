@@ -1,0 +1,13 @@
+{
+    "name": "com.wiseyestudio.texturepadder",
+    "version": "0.1.0",
+    "displayName": "WiseyeStudio Texture Padder",
+    "description": "Editor tool that finds textures whose imported size (after Max Size downscaling) blocks DXT/BC/ETC2 compression, and pads the source PNGs in place so they compress. GUIDs, sprite fileIDs, rects and pivots are kept.",
+    "unity": "6000.0",
+    "author": {
+        "name": "Wiseye Studio"
+    },
+    "dependencies": {
+        "com.unity.2d.sprite": "1.0.0"
+    }
+}
